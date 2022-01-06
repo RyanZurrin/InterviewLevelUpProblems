@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ryazur/src/leetcode/main.cpp
+bits/stdc++.h
+-
+string
+-
+utility
+-
+vector
+-
+climits
+-
+iostream
+-
+ostream
+-
+algorithm
+-
+cmath
+-
+cstdlib
+-
+queue
+-
+bitset
+-
+stack
+-
+unordered_set
+-
+
