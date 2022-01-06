@@ -111,7 +111,7 @@ void nodesAtDistanceK(bt_node* root, int k, vector<int>& v) {
     return v;
 }
 
-vector<int> leftView(bt_node * root){
+[[maybe_unused]] vector<int> leftView(bt_node * root){
     // visit all node in the left subtree
 
     vector<int> v;
@@ -2749,7 +2749,7 @@ public:
      * @param node  the node to compare to
      * @return  the correlation coefficient between the two trees
      */
-    [[maybe_unused]] double correlationCoef(t_treeNode<T> *node) {
+    [[maybe_unused]] double correlationCoefficient(t_treeNode<T> *node) {
           return correlationCoefficient(root, node);
       }
 

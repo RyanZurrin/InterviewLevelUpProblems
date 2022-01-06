@@ -113,7 +113,7 @@
     cout << "The 80% confidence interval is [" << ci5.first << ", " << ci5.second << "]" << endl;
     cout << "The 80% confidence interval is [" << ci6.first << ", " << ci6.second << "]" << endl;
     // get the correlation of the BST
-    cout << "The correlation of the BST is " << bst.correlationCoef(bst2.getRoot()) << endl;
+    cout << "The correlation of the BST is " << bst.correlationCoefficient(bst2.getRoot()) << endl;
 
 
 
