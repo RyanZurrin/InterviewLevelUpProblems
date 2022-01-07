@@ -52,28 +52,23 @@ c4 0 1
 c5 2 3
  */
 [[maybe_unused]] void printNearestCars(vector<Car> &cars, int k) {
-    priority_queue<Car, vector<Car>, CarCompare> pq(cars.begin(), cars.end() + k);
-
-    // remaining cars
-    for (int i = k; i < cars.size(); i++) {
-        auto car = cars[i];
-        if (car.dist() < pq.top().dist()) {
+    priority_queue<Car, vector<Car>, CarCompare> pq;
+    for (auto &car : cars) {
+        pq.push(car);
+        if (pq.size() > k) {
             pq.pop();
-            pq.push(car);
         }
     }
-    vector<Car> output;
-    while(!pq.empty()) {
-        output.push_back(pq.top());
+    vector<Car> result;
+    while (!pq.empty()) {
+        result.push_back(pq.top());
         pq.pop();
     }
-    // sort output
-    reverse(output.begin(), output.end());
-    cout << endl;
-    cout << endl;
-    for (const auto& car : output) {
+    reverse(result.begin(), result.end());
+    for (auto &car : result) {
         cout << car.id << endl;
     }
+    cout << endl;
 }
 
 struct TreeNode {
