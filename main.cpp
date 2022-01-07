@@ -26,6 +26,26 @@
 #define INT_SIZE sizeof(int) * 8
 using namespace std;
 
+
+
+class [[maybe_unused]] Point {
+public:
+    [[maybe_unused]] int x;
+    [[maybe_unused]] int y;
+    Point() : x(0), y(0) {}
+    Point(int a, int b) : x(a), y(b) {}
+};
+
+class [[maybe_unused]] PointComparator {
+public:
+    bool operator()(const Point &a, const Point &b) const {
+        if (a.x == b.x) {
+            return a.y < b.y;
+        }
+        return a.x < b.x;
+    }
+};
+
 class [[maybe_unused]] Car {
 public:
     [[maybe_unused]] string id;
@@ -37,7 +57,7 @@ public:
     }
 };
 
-class CarCompare {
+class CarComparator {
 public:
     bool operator()(const Car &a, const Car &b) const {
         return a.dist() < b.dist(); // makes a min heap
@@ -52,7 +72,7 @@ c4 0 1
 c5 2 3
  */
 [[maybe_unused]] void printNearestCars(vector<Car> &cars, int k) {
-    priority_queue<Car, vector<Car>, CarCompare> pq;
+    priority_queue<Car, vector<Car>, CarComparator> pq;
     for (auto &car : cars) {
         pq.push(car);
         if (pq.size() > k) {
@@ -906,6 +926,25 @@ node* mergeSort(node* head) {
     }
     return false;
 }
+// given a linked list which contains a cycle, build a hashing algorithm to break
+// the cycle and return the head of the linked list, the last node should point
+// to NULL after breading the cycle. NOTE: it is not guaranteed that each element of
+// the linked list is unique.
+node * breakCycle(node * head){
+    if(head == nullptr){
+        return nullptr;
+    }
+    unordered_map<node*, bool> m;
+    node* temp = head;
+    // add values to the map until temp->next is already in the map
+    while(temp != nullptr && m.find(temp->next) == m.end()){
+        m[temp] = true;
+        temp = temp->next;
+    }
+    temp->next = nullptr;
+    return head;
+
+}
 
 //___________________________end Udemy course Linked List_______________________
 //______________________________________________________________________________
@@ -1029,6 +1068,56 @@ public:
         }
     }
     return true;
+}
+
+vector<int> getHashValue(string s, int i, int j) {
+    vector<int> freq(26, 0);
+    for (int k = i; k <= j; k++) {
+        char ch = s[k];
+        freq[ch - 'a']++;
+    }
+    return freq;
+}
+
+// given a string, find the number of pairs of substrings of the string that
+// are anagrams of each other
+[[maybe_unused]] int countAnagrams(const string& str) {
+    // generate all substrings
+    map<vector<int>, int> hashMap;
+    int anagramCount = 0;
+    for (int i = 0; i < str.length(); i++) {
+        for (int j = i; j < str.length(); j++) {
+            // get hash value of substring
+            vector<int> freq = getHashValue(str, i, j);
+            // check if hash value is present in hash table
+            hashMap[freq]++;
+        }
+    }
+    for (auto& it : hashMap) {
+        int freq = it.second;
+        if (freq > 1) {
+            anagramCount += freq * (freq - 1) / 2;
+        }
+    }
+    return anagramCount;
+}
+
+vector<vector<string>> groupAnagrams(vector<string> strs){
+    unordered_map<string, int> hashMap;
+    vector<vector<string>> result;
+    for (int i = 0; i < strs.size(); i++) {
+        string s = strs[i];
+        sort(s.begin(), s.end());
+        if (hashMap.find(s) == hashMap.end()) {
+            vector<string> temp;
+            temp.push_back(strs[i]);
+            result.push_back(temp);
+            hashMap[s] = result.size() - 1;
+        } else {
+            result[hashMap[s]].push_back(strs[i]);
+        }
+    }
+    return result;
 }
 
 // is balanced parenthesis
@@ -1437,7 +1526,7 @@ public:
 }; // end of class Deque
 
 
-int join_ropes(int ropes[], int n) {
+[[maybe_unused]] int join_ropes(int ropes[], int n) {
     priority_queue<int, vector<int>, greater<>> pq(ropes, ropes + n);
 
     int cost = 0;
@@ -5480,14 +5569,338 @@ pair<bool, int> seekPath(int m, int n, int i, int j, vector<vector<int>> v, bool
     }
     return result;
 }
+// input is : 10 5 2 3 0 12 18 20 22 -1
+[[maybe_unused]] void runningMedian() {
+    priority_queue<int> left_heap;
+    priority_queue<int, vector<int>, greater<>> right_heap;
+
+    int d;
+    cin >> d;
+    left_heap.push(d);
+    double med = d;
+    cout << med << " ";
+    cin >> d;
+    while (d != -1) {
+        if(left_heap.size() > right_heap.size()) {
+            if (d < med) {
+                right_heap.push(left_heap.top());
+                left_heap.pop();
+                left_heap.push(d);
+            } else {
+                right_heap.push(d);
+            }
+            med = (left_heap.top() + right_heap.top()) / 2.0;
+        }
+        else if (left_heap.size() == right_heap.size()) {
+            if (d < med) {
+                left_heap.push(d);
+                med = left_heap.top();
+            } else {
+                right_heap.push(d);
+                med = right_heap.top();
+            }
+        } else {
+            if (d < med) {
+                left_heap.push(d);
+            } else {
+                left_heap.push(right_heap.top());
+                right_heap.pop();
+                right_heap.push(d);
+            }
+            med = (left_heap.top() + right_heap.top()) / 2.0;
+        }
+        cout << med << " ";
+        cin >> d;
+    }
+}
+class MedianHandler{
+public:
+    float median;
+    priority_queue<int, vector<int>, greater<>> right_heap;
+    priority_queue<int> left_heap;
+    MedianHandler() {
+        median = 0;
+    }
+
+    void push(int number){
+        //Complete this method to update median after every insertion
+        //of a new number
+        if(left_heap.size() > right_heap.size()) {
+            if (number < median) {
+                right_heap.push(left_heap.top());
+                left_heap.pop();
+                left_heap.push(number);
+            } else {
+                right_heap.push(number);
+            }
+            median = (left_heap.top() + right_heap.top()) / 2.0;
+        }
+        else if (left_heap.size() == right_heap.size()) {
+            if (number < median) {
+                left_heap.push(number);
+                median = left_heap.top();
+            } else {
+                right_heap.push(number);
+                median = right_heap.top();
+            }
+        } else {
+            if (number < median) {
+                left_heap.push(number);
+            } else {
+                left_heap.push(right_heap.top());
+                right_heap.pop();
+                right_heap.push(number);
+            }
+            median = (left_heap.top() + right_heap.top()) / 2.0;
+        }
+
+    }
+    [[nodiscard]] float getMedian() const{
+        //Complete this , Should return the median in O(1) time
+        return median;
+    }
+};
+
+[[maybe_unused]] void runningMedian2() {
+    MedianHandler m;
+    int d;
+    cin >> d;
+    m.push(d);
+    cout << m.getMedian() << " ";
+    cin >> d;
+    while (d != -1) {
+        m.push(d);
+        cout << m.getMedian() << " ";
+        cin >> d;
+    }
+}
+
+[[maybe_unused]] vector<int> mergeKArrays(const vector<vector<int> >& arrays){
+    //Complete this function
+    priority_queue<int, vector<int>, greater<>> pq;
+    // push all the elements from each vector of vectors using a double for loop
+    for(auto & array : arrays){
+        for(int j : array){
+            pq.push(j);
+        }
+    }
+    vector<int> result;
+    while(!pq.empty()){
+        result.push_back(pq.top());
+        pq.pop();
+    }
+    return result;
+}
+
+template<typename T>
+[[maybe_unused]] vector<T> commonElements(vector<T>& v1, vector<T>& v2){
+    //Complete this function using STL algorithms
+    vector<T> result;
+    set<T> s;
+    for(auto & i : v1){
+        s.insert(i);
+    }
+    for(auto & i : v2){
+        if(s.find(i) != s.end()){
+            result.push_back(i);
+        }
+    }
+    // sort the result vector
+    sort(result.begin(), result.end());
+    return result;
+}
+
+// Given a string, find the first repeating letter in a string in a single scan
+// of the string. Return '\0' if no repeating letter is found.
+
+[[maybe_unused]] char firstRepeatingChar(string input) {
+    // Complete this function
+    int n = input.length();
+    if(n == 0) return '\0';
+    unordered_map<char, int> m;
+    for(int i = 0; i < n; i++){
+        if(m.find(input[i]) != m.end()){
+            return input[i];
+        }
+        m[input[i]] = i;
+    }
+    return '\0';
+}
+
+[[maybe_unused]] int  count_triplets(const vector<int>& arr, int r) {
+    unordered_map<long, long> left;
+    unordered_map<long, long> right;
+    int count = 0;
+    int n = arr.size();
+    for(auto & i : arr){
+        right[i]++;
+        left[i] = 0;
+    }
+    for(int i = 0; i < n; i++){
+        right[arr[i]]--;
+        if (arr[i] % r == 0) {
+            long b = arr[i];
+            long a = arr[i] / r;
+            long c = arr[i] * r;
+            count += left[a] * right[c];
+        }
+
+        left[arr[i]]++;
+    }
+    return count;
+}
+
+// given N cartesian points in a 2D Plane, find the number of axis parallel
+// rectangles that are formed
+[[maybe_unused]] int countRectangles(const vector<Point>& points) {
+    // Complete this function
+    set<Point, PointComparator> s;
+    int count = 0;
+
+    for(auto & i : points){
+        s.insert(i);
+    }
+    for(auto it = s.begin(); it != prev(s.end()); it++){
+        for (auto jt = next(it); jt != s.end(); jt++){
+            Point p1 = *it;
+            Point p2 = *jt;
+            if (p2.x == p1.x || p2.y == p1.y){
+                continue;
+            }
+            Point p3(p1.x, p2.y);
+            Point p4(p2.x, p1.y);
+            if (s.find(p3) != s.end() && s.find(p4) != s.end()){
+                count++;
+            }
+        }
+    }
+    return count/2;
+}
+
+// Given N Cartesian Points in a 2D Plane, find the number of triangles such that
+// the base or perpendicular is parallel to the X or Y axis
+[[maybe_unused]] int countTriangles(const vector<Point>& points) {
+    // Complete this function
+    unordered_map<int, int> X; // {key, freq}
+    unordered_map<int, int> Y; // {key, freq}
+    int count = 0;
+    for (auto & i : points){ // count the frequency of each point
+        int x = i.x;
+        int y = i.y;
+        X[x]++;
+        Y[y]++;
+    }
+    for (auto & p : points){
+       int x = p.x;
+       int y = p.y;
+
+       int fx = X[x];
+       int fy = Y[y];
+
+       count += (fx - 1) * (fy - 1);
+    }
+    return count;
+}
+
+int min_bars_helper(
+        const string& s, vector<string>& words, int idx, unordered_set<string>& m){
+    // base case
+    if (s[idx] == '\0'){
+        return 0;
+    }
+    int min_bars = INT_MAX;
+    string current_string;
+    for (int j = idx; s[j] != '\0'; j++){
+        current_string += s[j];
+        if (m.find(current_string) != m.end()){
+            int bars = min_bars_helper(s, words, j + 1, m);
+            if (bars != -1){
+                min_bars = min(min_bars, bars + 1);
+            }
+        }
+    }
+    return min_bars == INT_MAX ? -1 : min_bars;
+}
+
+int min_bars_helper(
+        const string& s, string words[], int idx, unordered_set<string>& m){
+    // base case
+    if (s[idx] == '\0'){
+        return 0;
+    }
+    int min_bars = INT_MAX;
+    string current_string;
+    for (int j = idx; s[j] != '\0'; j++){
+        current_string += s[j];
+        if (m.find(current_string) != m.end()){
+            int bars = min_bars_helper(s, words, j + 1, m);
+            if (bars != -1){
+                min_bars = min(min_bars, bars + 1);
+            }
+        }
+    }
+    return min_bars == INT_MAX ? -1 : min_bars;
+}
+
+int min_bars(const string& s, vector<string>& words) {
+    unordered_set<string> m;
+    // get length of words array
+    int n = 0;
 
 
+    for (auto & word : words){
+        m.insert(word);
+    }
+    int output = min_bars_helper(s, words, 0, m);
+    return output - 1;
+}
+
+int min_bars(const string& s, string words[], int n){
+    //Complete this function return the min bars
+    // n is number of words
+    unordered_set<string> m;
+    for (int i = 0; i < n; i++){
+        m.insert(words[i]);
+    }
+    int output = min_bars_helper(s, words, 0, m);
+    return output - 1;
+}
+
+int longestSubarrayKSum(const vector<int>& arr,int k){
+    //Complete this function and return the length of longest subarray
+    // such that sum of elements is k
+    // use prefix sums and an unordered_map
+    unordered_map<int, int> m;
+    int sum = 0;
+    int max_len = 0;
+    for (int i = 0; i < arr.size(); i++){
+        sum += arr[i];
+        if (sum == k){
+            max_len = i + 1;
+        }
+        if (m.find(sum - k) != m.end()){
+            max_len = max(max_len, i - m[sum - k]);
+        }
+        m[sum] = i;
+    }
+    return max_len;
+}
 
 
 int main()
 {
-    int ropes[] = {4, 3, 2, 6};
-    int n = 4;
-    cout << join_ropes(ropes, n) << endl;
+    map<string,int> price;
+
+    price["Mango"]=10;
+
+    while(price["Mango"]){
+        price["Mango"]--;
+    }
+
+    if(price.count("Mango")){
+        cout<<"Mango Present";
+    }else{
+        cout<<"Mango Absent";
+    }
 
 }
