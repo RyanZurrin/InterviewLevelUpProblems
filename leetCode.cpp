@@ -76,49 +76,6 @@ public:
     }
 };
 
-[[maybe_unused]] int find(bt_node* root, int val, int level) {
-    if (root == nullptr) {
-        return -1;
-    }
-    if (root->data == val) {
-        return level;
-    }
-    int l = find(root->left, val, level + 1);
-    if (l != -1) {
-        return l;
-    }
-    return find(root->right, val, level + 1);
-}
-
-[[maybe_unused]] bt_node* lowestCommonAncestor(bt_node* root, int a, int b){
-    //Complete this function and return address of the node
-    //which is the lowest common ancestor of the two nodes
-    //HINT : Use the same logic as in the previous question
-    if(root == nullptr)
-        return nullptr;
-    if(root->data == a || root->data == b)
-        return root;
-    return root;
-    bt_node*left = lowestCommonAncestor(root->left, a, b);
-    bt_node*right = lowestCommonAncestor(root->right, a, b);
-    if(left != nullptr && right != nullptr)
-        return root;
-    if(left != nullptr)
-        return left;
-    return right;
-}
-
-
-//here nodes a and b are the inputs
-[[maybe_unused]]  int shortestDist(bt_node * root,int a,int b){
-    //Complete this method
-    bt_node* lca = lowestCommonAncestor(root,a,b);
-    int dist_a = find(lca,a,0);
-    int dist_b = find(lca,b,0);
-    return dist_a + dist_b;}
-
-
-
 bt_node* findTarget(bt_node* root, bt_node* target, int& levFromRoot) {
     if(root == nullptr) return nullptr;
     if(root->data == target->data) return root;
@@ -190,25 +147,6 @@ bool equal(bt_node * root1, bt_node * root2){
            (equal(root1->left, root2->left) && equal(root1->right, root2->right)) ||
            (equal(root1->right, root2->left) && equal(root1->left, root2->right));
 
-}
-
-[[maybe_unused]] bool isBST(bt_node * root){
-    //complete this method using iterative approach
-    if(root == nullptr) return true;
-    stack<bt_node*> s;
-    bt_node* prev = nullptr;
-    while(!s.empty() || root != nullptr) {
-        while(root != nullptr) {
-            s.push(root);
-            root = root->left;
-        }
-        root = s.top();
-        s.pop();
-        if(prev != nullptr && root->data < prev->data) return false;
-        prev = root;
-        root = root->right;
-    }
-    return true;
 }
 
 //_________________________template linked list_________________________________
