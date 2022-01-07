@@ -26,6 +26,56 @@
 #define INT_SIZE sizeof(int) * 8
 using namespace std;
 
+class [[maybe_unused]] Car {
+public:
+    [[maybe_unused]] string id;
+    int x;
+    int y;
+    Car(string id, int x, int y) : id(std::move(id)), x(x), y(y) {}
+    [[maybe_unused]] [[nodiscard]] int dist() const {
+        return x*x + y*y;
+    }
+};
+
+class CarCompare {
+public:
+    bool operator()(const Car &a, const Car &b) const {
+        return a.dist() < b.dist(); // makes a min heap
+    }
+};
+/*
+5 3
+c1 1 1
+c2 2 1
+c3 3 2
+c4 0 1
+c5 2 3
+ */
+[[maybe_unused]] void printNearestCars(vector<Car> &cars, int k) {
+    priority_queue<Car, vector<Car>, CarCompare> pq(cars.begin(), cars.end() + k);
+
+    // remaining cars
+    for (int i = k; i < cars.size(); i++) {
+        auto car = cars[i];
+        if (car.dist() < pq.top().dist()) {
+            pq.pop();
+            pq.push(car);
+        }
+    }
+    vector<Car> output;
+    while(!pq.empty()) {
+        output.push_back(pq.top());
+        pq.pop();
+    }
+    // sort output
+    reverse(output.begin(), output.end());
+    cout << endl;
+    cout << endl;
+    for (const auto& car : output) {
+        cout << car.id << endl;
+    }
+}
+
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -5422,21 +5472,18 @@ pair<bool, int> seekPath(int m, int n, int i, int j, vector<vector<int>> v, bool
 
 int main()
 {
-    // test the BST
-    t_BST<int> bst(20, 1, 30);
-    bst.print2D();
-    cout << endl;
-    bst.levelOrder();
-    cout << endl;
-    bst.verticalOrder();
-    cout << endl;
+    int N,K;
+    cin >> N >> K;
+    string id;
+    int x,y;
+    vector<Car> cars;
+    for (int i = 0; i < N; i++) {
+        cin >> id >> x >> y;
+        Car car(id, x, y);
+        cars.push_back(car);
+    }
 
-
-
-
-
-
-
+    printNearestCars(cars, K);
 
     return 0;
 }
