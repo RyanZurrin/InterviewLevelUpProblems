@@ -930,7 +930,7 @@ node* mergeSort(node* head) {
 // the cycle and return the head of the linked list, the last node should point
 // to NULL after breading the cycle. NOTE: it is not guaranteed that each element of
 // the linked list is unique.
-node * breakCycle(node * head){
+[[maybe_unused]] node * breakCycle(node * head){
     if(head == nullptr){
         return nullptr;
     }
@@ -1102,19 +1102,19 @@ vector<int> getHashValue(string s, int i, int j) {
     return anagramCount;
 }
 
-vector<vector<string>> groupAnagrams(vector<string> strs){
+[[maybe_unused]] vector<vector<string>> groupAnagrams(const vector<string>& strs){
     unordered_map<string, int> hashMap;
     vector<vector<string>> result;
-    for (int i = 0; i < strs.size(); i++) {
-        string s = strs[i];
+    for (auto & str : strs) {
+        string s = str;
         sort(s.begin(), s.end());
         if (hashMap.find(s) == hashMap.end()) {
             vector<string> temp;
-            temp.push_back(strs[i]);
+            temp.push_back(str);
             result.push_back(temp);
             hashMap[s] = result.size() - 1;
         } else {
-            result[hashMap[s]].push_back(strs[i]);
+            result[hashMap[s]].push_back(str);
         }
     }
     return result;
@@ -5842,7 +5842,7 @@ int min_bars_helper(
     return min_bars == INT_MAX ? -1 : min_bars;
 }
 
-int min_bars(const string& s, vector<string>& words) {
+[[maybe_unused]] int min_bars(const string& s, vector<string>& words) {
     unordered_set<string> m;
     // get length of words array
     int n = 0;
@@ -5855,7 +5855,7 @@ int min_bars(const string& s, vector<string>& words) {
     return output - 1;
 }
 
-int min_bars(const string& s, string words[], int n){
+[[maybe_unused]] int min_bars(const string& s, string words[], int n){
     //Complete this function return the min bars
     // n is number of words
     unordered_set<string> m;
@@ -5866,8 +5866,8 @@ int min_bars(const string& s, string words[], int n){
     return output - 1;
 }
 
-int longestSubarrayKSum(const vector<int>& arr,int k){
-    //Complete this function and return the length of longest subarray
+[[maybe_unused]] int longestSubarrayKSum(const vector<int>& arr,int k){
+    //Complete this function and return the length of the longest subarray
     // such that sum of elements is k
     // use prefix sums and an unordered_map
     unordered_map<int, int> m;
@@ -5886,21 +5886,279 @@ int longestSubarrayKSum(const vector<int>& arr,int k){
     return max_len;
 }
 
+/*
+ * Complete the 'subsetA' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY arr as parameter.
+ * the intersection of A and B is null
+ * the union A and B is equal to the original set
+ * the number of elements in subset A is minimal
+ * the sum of A's elements is greater than the sum of B's elements
+ */
+
+[[maybe_unused]] vector<int> subsetA(const vector<int>& arr) {
+    // Complete this function
+    // use a priority queue
+    // get sum of elements in arr
+    long long sum = 0;
+    int sum2 = 0;
+    long long curSum = 0;
+    for (auto & i : arr){
+        sum += i;
+        sum2 += i;
+    }
+    // print out the sum
+    cout << sum << endl;
+    cout << sum2 << endl;
+    priority_queue<int> pq;
+    vector<int> output;
+    for (auto & i : arr){
+        pq.push(i);
+    }
+    // add one element to output and check that its sum is greater than sum/2
+    while (!pq.empty()){
+        int curr = pq.top();
+        pq.pop();
+        output.push_back(curr);
+        curSum += curr;
+        if (curSum > sum / 2){
+            break;
+        }
+    }
+    // sort the output
+    sort(output.begin(), output.end());
+    return output;
+
+}
+bool isTriangle(int a, int b, int c) {
+    cout << a << " " << b << " " << c << endl;
+    // Complete this function
+    // use the fact that a triangle is formed by the sum of two sides
+    // and the third side is the difference of the two sides
+    // if the sum of two sides is greater than the third side, then it is a triangle
+    return a + b > c && a + c > b && b + c > a;
+}
+/**
+ * Given 3 lines, find out if they can form a non-degenerate triangle. If the 3
+ * lines are placed with tips joined such that they form a triangle with non-zero
+ * angles at each vertex, then a non-degenerate triangle is formed.
+ * @param a[n] an array where each index i describes the length of side a for triangle i
+ * @param b[n] an array representing lengths of sides b[i] for triangle i
+ * @param c[n] an array representing lengths of sides c[i] for triangle i
+ * @return String arr[n]: an array where the value at each index i is "Yes" if a[i],
+ * b[i], and c[i] can form a triangle with non-zero angles at each vertex, and "No"
+ * if they cannot.
+ */
+[[maybe_unused]]
+vector <string> triangleOrNot(
+        const vector <int>& a, const vector <int>& b, const vector <int>& c) {
+    // Complete this function
+    // check that all three sizes of vectors are equal
+    int n = a.size();
+    if (a.size() != b.size() || a.size() != c.size()){
+        return {};
+    }
+    vector<string> output;
+    for (int i = 1; i < n; i++){
+        if (isTriangle(a[i], b[i], c[i])){
+            output.emplace_back("Yes");
+        } else {
+            output.emplace_back("No");
+        }
+    }
+    return output;
+}
+int findStartingIndex(vector<int> arr, int k){
+    // start at front of unsorted array and count indexes until
+    // k is found
+    int n = arr.size();
+    int i = 0;
+    while (i < n && arr[i] != k){
+        i++;
+    }
+    return i;
+}
+
+int findEndingIndex(vector<int> arr, int k) {
+    // start at back of array and count indexes going backwards until
+    // k is found
+    int n = arr.size();
+    int i = n - 1;
+    while (i >= 0 && arr[i] != k){
+        i--;
+    }
+    return i;
+}
+
+/*
+ * Complete the 'degreeOfArray' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY arr as parameter.
+ */
+
+[[maybe_unused]] int degreeOfArray(const vector<int>& arr) {
+    // use a hashmap to store the number of times each element appears
+    unordered_map<int, int> m;
+    for (auto & i : arr){
+        m[i]++;
+    }
+    vector<int> valuesWithMaxDegree;
+    int maxDegree = 0;
+    for (auto & i : m){
+        if (i.second > maxDegree){
+            maxDegree = i.second;
+            valuesWithMaxDegree.clear();
+            valuesWithMaxDegree.push_back(i.first);
+        } else if (i.second == maxDegree){
+            valuesWithMaxDegree.push_back(i.first);
+        }
+    }
+    // find the smallest subarray from the values with max degree and return its size
+    int min;
+    int n = valuesWithMaxDegree.size();
+    for (int i = 0; i < n; i++){
+        int start = findStartingIndex(arr, valuesWithMaxDegree[i]);
+        int end = findEndingIndex(arr, valuesWithMaxDegree[i]);
+        if (i == 0){
+            min = end - start + 1;
+        } else {
+            if (end - start + 1 < min){
+                min = end - start + 1;
+            }
+        }
+    }
+    return min;
+}
+
+/*
+ * Complete the 'compressedString' function below.
+ *
+ * The function is expected to return a STRING.
+ * The function accepts STRING message as parameter.
+ */
+
+[[maybe_unused]] string compressWithRunLengthEncoding(string message) {
+    // message is the input string to compress using run length encoding
+    // use a string stream to store the compressed string as long as the character
+    // is repeated more than once
+    stringstream ss;
+    int n = message.size();
+    int i = 0;
+    while (i < n){
+        int count = 1;
+        while (i < n - 1 && message[i] == message[i + 1]){
+            count++;
+            i++;
+        }
+        // if count is greater than 1, then add the character and the count to the string stream
+        ss << message[i] << (count > 1 ? to_string(count) : "");
+        i++;
+    }
+    if (ss.str().size() < message.size()){
+        return ss.str();
+    } else {
+        return message;
+    }
+}
+
+/**
+ * Complete the 'circularArray' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ * @param INTEGER n is the length of the array
+ * @param INTEGER_ARRAY endNode[m]: each element endNode[i] (where 0 <= i < m-1)
+ * means when starting from position endNode[i], finish at position endNode[i+1]
+ * @return INTEGER: the node number that is visited most; if there are multiple answers,
+ * return the smallest one.
+ */
+
+[[maybe_unused]] int circularArray(int n, const vector<int>& endNode) {
+    // use a hashmap to store the number of times each node is visited
+    unordered_map<int, int> m;
+    for (auto & i : endNode){
+        m[i]++;
+    }
+    int max = 0;
+    int maxNode = 0;
+    for (auto & i : m){
+        if (i.second > max){
+            max = i.second;
+            maxNode = i.first;
+        }
+    }
+    return maxNode;
+}
+
+bool canFlyWithMagicCarpet(int magic, int distance) {
+    return magic >= distance;
+}
+/*
+ * Complete the 'optimalPoint' function below. which represents Aladdin and
+ * his magic carpet.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY magic
+ *  2. INTEGER_ARRAY dist
+ */
+int aladdinsStartingPoint(vector<int> magic, vector<int> dist) {
+    if (magic.size() != dist.size()) {
+        return -1;
+    }
+    int n = magic.size();
+    int sumMagic = accumulate(magic.begin(), magic.end(), 0);
+    int sumDist = accumulate(dist.begin(), dist.end(), 0);
+    if (sumMagic < sumDist) {
+        return -1;
+    }
+    int startPosition = 0;
+    do {
+        cout << "start position is " << startPosition << endl;
+        int count = 0;
+        int position = startPosition;
+        cout << "position is " << position << endl;
+        int magicPotion = magic[position];
+        cout << "magic is " << magicPotion << endl;
+        int distance = dist[position+1];
+        cout << "to next distance is " << distance;
+        while (canFlyWithMagicCarpet(magicPotion, distance)) {
+            if (count == n - 1) {
+                cout << "count == n - 1, returning start position";
+                return startPosition;
+            }
+            if (position == magic.size() - 1) {
+                cout << "position is resetting to 0" << endl;
+                position = 0;
+            }
+
+            cout << "position++" << position << endl;
+            magicPotion = magicPotion - dist[position] + magic[position];
+            cout << "magicPotion is now at " << magicPotion << endl;
+            position++;
+            distance = dist[position];
+            cout << "distance to next place is " << distance << endl;
+            if (position == startPosition) {
+                cout << "position == startPosition, returning startPosition of "
+                     << startPosition << endl;
+                return startPosition;
+            }
+            count++;
+            cout << "count++ is now at " << count << endl;
+        }
+        startPosition++;
+        cout << "starting position incremented is now " << startPosition
+             << endl;
+
+    } while (startPosition != n);
+    return -1;
+}
 
 int main()
 {
-    map<string,int> price;
-
-    price["Mango"]=10;
-
-    while(price["Mango"]){
-        price["Mango"]--;
-    }
-
-    if(price.count("Mango")){
-        cout<<"Mango Present";
-    }else{
-        cout<<"Mango Absent";
-    }
-
+    vector<int> magic = {10, 6, 3, 8, 1};
+    vector<int> dist = {1, 3, 8, 4, 3};
+    cout << aladdinsStartingPoint(magic, dist) << endl;
 }
