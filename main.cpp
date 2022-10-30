@@ -2691,9 +2691,9 @@ public:
         root = nullptr;
         size = 0;
         // seed the random number generator from the system clock and random library
-        srandom(time(nullptr));
+        srand(time(nullptr));
         for (int i = 0; i < totalElements; i++) {
-            insert(random() % (max - min + 1) + min);
+            insert(rand() % (max - min + 1) + min);
         }
     }
 
@@ -6154,6 +6154,462 @@ int aladdinsStartingPoint(vector<int> magic, vector<int> dist) {
 
     } while (startPosition != n);
     return -1;
+}
+
+/**
+ * N-K Ladders problem
+ * @return  the number of ways to climb the ladder
+ */
+ int countWaysOpt(int n, int k) {
+     vector<int> dp(n+1, 0);
+     dp[0] = dp[1] = 1;
+     for (int i = 2; i <=k; i++) {
+         dp[i] = 2*dp[i-1];
+     }
+     for (int i = k+1; i <=n; i++) {
+         dp[i] = 2*dp[i-1] - dp[i-k-1];
+     }
+     return dp[n];
+ }
+
+ /**
+  * Coin change problem DP solution
+  */
+  int minNumberOfCoinsForChange(int m, vector<int> denoms) {
+      vector<int> dp(m+1, 0);
+      dp[0] = 0;
+      for (int i = 1; i <= m; i++) {
+          dp[i] = INT_MAX;
+          for (int c : denoms) {
+              if (i - c >= 0 and dp[i-c] != INT_MAX) {
+                  dp[i] = min(dp[i], dp[i-c] + 1);
+              }
+          }
+      }
+      return dp[m]==INT_MAX ? -1 : dp[m];
+  }
+
+  /**
+   * Cutting rods problem
+   * @return
+   */
+   int max_profit_dp(int *prices, int n) {
+       int dp[n+1];
+       dp[0] = 0;
+       for (int len=1; len<=n; len++) {
+           int ans = INT_MIN;
+           for (int i=0; i<len; i++) {
+               int cut = i + 1;
+               int cur_ans = prices[i] + dp[len-cut];
+               ans = max(ans, cur_ans);
+           }
+           dp[len] = ans;
+       }
+       return dp[n];
+   }
+
+   /**
+    * Min array jump problem using DP
+    * @return
+    */
+int min_jumps(vector<int> arr, int n, vector<int> dp, int i) {
+    if (i == n-1) {
+        return 0;
+    }
+    if (i>=n) {
+        return INT_MAX;
+    }
+    if (dp[i] != 0) {
+        return dp[i];
+    }
+    int steps = INT_MAX;
+    int max_jump = arr[i];
+
+    for (int jump = 1; jump<=max_jump; jump++) {
+        int next_cell = i + jump;
+        int subprob = min_jumps(arr, n, dp, next_cell);
+        if (subprob != INT_MAX) {
+            steps = min(steps, subprob + 1);
+        }
+    }
+    dp[i] = steps;
+}
+
+/**
+ * frog jump problem using DP
+ * @return
+ */
+ int getMinCost(vector<int> stones) {
+     int n = stones.size();
+     vector<int> dp(n, 0);
+     dp[0] = abs(stones[1] - stones[0]);
+     for (int i = 2; i < n; i++) {
+         int op1 = abs(stones[i] - stones[i-1]) + dp[i-1];
+         int op2 = abs(stones[i] - stones[i-2]) + dp[i-2];
+         dp[i] = min(op1, op2);
+     }
+     return dp[n-1];
+ }
+
+ /**
+  * max subset sub no adjacent elements problem using DP
+  * @return
+  */
+  int maxSubsetSumNoAdjacent(vector<int> array) {
+      int n = array.size();
+      vector<int> dp(n+1, 0);
+      if (n==1) {
+          return max(array[0], 0);
+      }
+      else if (n==2) {
+          return max(0, max(array[0], array[1]));
+      }
+      // bottom up logic
+      dp[0] = max(array[0], 0);
+      dp[1] = max(0, max(array[0], array[1]));
+      for (int i = 2; i < n; i++) {
+          int inc = array[i] + dp[i-2];
+          int exc = dp[i-1];
+          dp[i] = max(inc, exc);
+      }
+      return dp[n-1];
+  }
+
+/**
+ * longes increasing subsequence problem using DP
+ * @return
+ */
+ int lis(vector<int> array) {
+     int n = array.size();
+     vector<int> dp(n, 1);
+     for (int i = 1; i < n; i++) {
+         for (int j = 0; j < i; j++) {
+             if (array[i] > array[j]) {
+                 dp[i] = max(dp[i], dp[j] + 1);
+             }
+         }
+     }
+     int max_len = INT_MIN;
+     for (int i = 0; i < n; i++) {
+         max_len = max(max_len, dp[i]);
+     }
+     return max_len;
+ }
+
+ /**
+  * box stacking problem using DP
+  */
+  bool compareBoxes(vector<int> b1, vector<int> b2) {
+      return b1[2] < b2[2];
+  }
+  bool canPlace(vector<int> b1, vector<int> b2) {
+      if (b1[0]>b2[0] and b1[1]>b2[1] and b1[2]>b2[2]) {
+          return true;
+      }
+      return false;
+  }
+  int boxStacking(vector<vector<int>> boxes) {
+      int n = boxes.size();
+      sort(boxes.begin(), boxes.end(), compareBoxes);
+      vector<int> dp(n, 0);
+      for (int i = 0; i < n; i++) {
+          dp[i] = boxes[i][2];
+          for (int j = 0; j < i; j++) {
+              if (canPlace(boxes[i], boxes[j])) {
+                  dp[i] = max(dp[i], dp[j] + boxes[i][2]);
+              }
+          }
+      }
+      int max_height = INT_MIN;
+      for (int i = 0; i < n; i++) {
+          max_height = max(max_height, dp[i]);
+      }
+      return max_height;
+  }
+
+  /**
+   * knapsack problem using DP
+   * @return
+   */
+  int knapsack(vector<int> weights, vector<int> values, int capacity) {
+      int n = weights.size();
+      vector<vector<int>> dp(n+1, vector<int>(capacity+1, 0));
+      for (int i = 1; i <= n; i++) {
+          for (int j = 1; j <= capacity; j++) {
+              if (weights[i-1] <= j) {
+                  dp[i][j] = max(dp[i-1][j], values[i-1] + dp[i-1][j-weights[i-1]]);
+              }
+              else {
+                  dp[i][j] = dp[i-1][j];
+              }
+          }
+      }
+      return dp[n][capacity];
+  }
+
+  /**
+   * counting trees problem using DP
+   * @return
+   */
+  int countTrees(int n) {
+      vector<int> dp(n+1, 0);
+      dp[0] = 1;
+      dp[1] = 1;
+      for (int i = 2; i <= n; i++) {
+          for (int j = 1; j <= i; j++) {
+              dp[i] += dp[j-1] * dp[i-j];
+          }
+      }
+      return dp[n];
+  }
+
+
+/**
+ * frog jump2
+ * @param stones
+ * @param k
+ * @return
+ */
+long long minimumCost(vector<int> stones, int k){
+    int n = stones.size();
+    vector<long long> dp(n);
+    for (int i = 1; i < n; i++) {
+        dp[i] = std::numeric_limits<long long>::max();
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = i+1; j <= i+k; j++) {
+            if (j < n) {
+                dp[j] = min(dp[j], dp[i] + abs(stones[j] - stones[i]));
+            }
+        }
+    }
+    return dp[n - 1];
+}
+
+/**
+ * selling wines problem using DP
+ * @return
+ */
+int wines_bottom_up(vector<int> prices, int n) {
+    vector<vector<int>> dp(n, vector<int>(n+1, 0));
+    for (int i=n-1; i>=0; i--) {
+        for (int j=0; j<n; j++) {
+            if (j <= i) {
+                int y = n - (j - 1);
+                int pick_left = prices[i]*y + dp[i+1][j];
+                int pick_right = prices[j]*(y) + dp[i][j-1];
+                dp[i][j] = max(pick_left, pick_right);
+            }
+        }
+    }
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<n; j++) {
+            cout << dp[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return dp[0][n-1];
+}
+
+/**
+ * Longest common subsequence problem using DP
+ * @return
+ */
+ int lcs(string s1, string s2) {
+     int n = s1.size();
+     int m = s2.size();
+     vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+     for (int i = 1; i <= n; i++) {
+         for (int j = 1; j <= m; j++) {
+             if (s1[i-1] == s2[j-1]) {
+                 dp[i][j] = dp[i-1][j-1] + 1;
+             }
+             else {
+                 int op1 = dp[i-1][j];
+                 int op2 = dp[i][j-1];
+                 dp[i][j] = max(op1, op2);
+             }
+         }
+     }
+     vector<char> result;
+     int i = n;
+     int j = m;
+     while (i != 0 && j != 0) {
+         if (dp[i][j] == dp[i][j-1]) {
+             result.push_back(s1[i-1]);
+             j--;
+         } else if (dp[i][j] == dp[i-1][j]) {
+             i--;
+         } else {
+             result.push_back(s1[i-1]);
+             i--;
+             j--;
+         }
+     }
+     reverse(result.begin(), result.end());
+     for (auto c : result) {
+         cout << c << ", ";
+     }
+     return dp[n][m];
+ }
+
+/**
+ * Counting subsequences problem using DP
+ * @return
+ */
+ int countingSubsequencesBU(string a, string b) {
+     int m = a.size();
+     int n = b.size();
+     vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+     for (int i=0; i<m;i++) {
+         dp[i][0] = 1;
+     }
+     //1,1 ... m,n
+     for(int i=1; i<=m; i++) {
+         for(int j=1; j<=n; j++) {
+             if (a[i-1] == b[j-1]) {
+                 dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+             } else {
+                 dp[i][j] = dp[i-1][j];
+             }
+         }
+     }
+     return dp[m][n];
+ }
+
+ /**
+  * Knapsack problem using DP bottom up
+  * @return
+  */
+  int knapsackDP(int wt[], int price[], int N, int W) {
+      vector<vector<int>> dp(N+1, vector<int>(W+1, 0));
+
+      for (int n=1; n<=N; n++) {
+          for (int w=1; w<=W; w++) {
+              int inc = 0, exc = 0;
+              if (wt[n-1] <= w) {
+                  inc = price[n-1] + dp[n-1][w-wt[n-1]];
+              }
+              exc = dp[n-1][w];
+              dp[n][w] = max(inc, exc);
+          }
+      }
+      return dp[N][W];
+  }
+
+/**
+ * coin change problem, given a value N and an interger vector COINS representing
+ * the denominations of the coins,
+ * your task is to find total number of comintantions of these coins that
+ * make a sum of N.
+ * @param n
+ * @param coins
+ * @return
+ */
+long long findCombinations(int n, vector<int> coins){
+    vector<vector<int>> dp(n + 1, vector<int>(coins.size(), 0));
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j < coins.size(); j++) {
+            if (i == 0) {
+                dp[i][j] = 1;
+            } else if (i < coins[j]) {
+                dp[i][j] = dp[i][j - 1];
+            } else {
+                dp[i][j] = dp[i][j - 1] + dp[i - coins[j]][j];
+            }
+        }
+    }
+    return dp[n][coins.size() - 1];
+}
+
+/**
+ * palindrome partitioning problem, given a string S,
+ */
+int palindromicPartitioningUtil(string s){
+    // min cuts to make s palindromic
+    int n = s.length();
+    vector<vector<bool> > isPalin(n+1,vector<bool>(n,false));
+
+    for(int i=0;i<n;i++){
+        isPalin[i][i] = true;
+    }
+
+    //2d dp palindromic grid for helper
+    // tell whether a string i...j is a palindrome or not
+    for(int len=2;len<=n;len++){
+        for(int i=0;i<=n-len;i++){
+            //substring i to j
+            int j = i + len - 1;
+            if(len==2){
+                isPalin[i][j] = (s[i]==s[j]);
+            }
+            else{
+                isPalin[i][j] = (s[i]==s[j] and isPalin[i+1][j-1]);
+            }
+        }
+    }
+
+    //min cut logic
+    vector<int> cuts(n+1,INT_MAX);
+
+    for(int i=0;i<n;i++){
+        if(isPalin[0][i]){
+            cuts[i] = 0;
+        }
+        else{
+            cuts[i]  = cuts[i-1] + 1;
+            for(int j=1;j<i;j++){
+                if(isPalin[j][i] and cuts[j-1] + 1 < cuts[i]){
+                    cuts[i] = cuts[j-1] + 1;
+                }
+            }
+        }
+    }
+    return cuts[n-1];
+}
+int partitioning(string str){
+    int res = palindromicPartitioningUtil(str);
+    return res;
+}
+
+/**
+ * edit distance problem, given two strings s1 and s2,
+ * @param a  string 1
+ * @param b  string 2
+ * @param na  length of string 1
+ * @param nb  length of string 2
+ * @param dp  2d dp array
+ * @return
+ */
+int minDistance(string a, string b, int na, int nb, vector<vector<int>>&dp){
+    if (na == 0) {
+        return nb;
+    }
+    if (nb == 0) {
+        return na;
+    }
+    if (dp[na][nb] != -1) {
+        return dp[na][nb];
+    }
+    int res = std::numeric_limits<int>::max();
+    if (a[na - 1] == b[nb - 1]) {
+        res = minDistance(a, b, na - 1, nb - 1, dp);
+    } else {
+        int op1 = minDistance(a, b, na - 1, nb, dp);
+        int op2 = minDistance(a, b, na, nb - 1, dp);
+        int ob3 = minDistance(a, b, na - 1, nb - 1, dp);
+        res = min(op1, min(op2, ob3)) + 1;
+    }
+    return dp[na][nb] = res;
+}
+
+
+int editDistance(string str1, string str2){
+    int n = str1.size();
+    int m = str2.size();
+    vector<vector<int>> dp(n+1,vector<int>(m+1,-1));
+    int res = minDistance(str1, str2, n, m, dp);
+    return res;
 }
 
 int main()

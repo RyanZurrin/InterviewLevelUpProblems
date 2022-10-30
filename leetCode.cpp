@@ -2476,9 +2476,9 @@ public:
         root = nullptr;
         size = 0;
         // seed the random number generator from the system clock and random library
-        srandom(time(nullptr));
+        srand(time(nullptr));
         for (int i = 0; i < totalElements; i++) {
-            insert(random() % (max - min + 1) + min);
+            insert(rand() % (max - min + 1) + min);
         }
     }
 
@@ -5355,8 +5355,107 @@ pair<bool, int> seekPath(int m, int n, int i, int j, vector<vector<int>> v, bool
     return result;
 }
 
+class MinimumDifficultyJobScheduler {
+public:
+    int minDifficulty(vector<int>& jobDifficulty, int d) {
+        int n = jobDifficulty.size();
+        if (n < d) return -1;
+        vector<vector<int>> dp(n, vector<int>(d, INT_MAX));
+        dp[0][0] = jobDifficulty[0];
+        for (int i = 1; i < n; ++i) {
+            dp[i][0] = max(dp[i - 1][0], jobDifficulty[i]);
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j < d; ++j) {
+                int maxVal = jobDifficulty[i];
+                for (int k = i; k >= j; --k) {
+                    maxVal = max(maxVal, jobDifficulty[k]);
+                    dp[i][j] = std::min(dp[i][j], dp[k - 1][j - 1] + maxVal);
+                }
+            }
+        }
+        return dp[n - 1][d - 1];
 
+    }
+};
 
+class CoinChange {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; ++i) {
+            for (int j = 0; j < coins.size(); ++j) {
+                if (coins[j] <= i) {
+                    dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+
+    }
+};
+
+class WordBreak {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.size() + 1, false);
+        dp[0] = true;
+        for (int i = 1; i <= s.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (dp[j] && dict.find(s.substr(j, i - j)) != dict.end()) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.size()];
+
+    }
+};
+
+class LongestIncreasingSubsequence {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> dp(nums.size(), 1);
+        int result = 1;
+        for (int i = 1; i < nums.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            result = max(result, dp[i]);
+        }
+        return result;
+    }
+};
+
+class BestTimeToBuyAndSellStockIV {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        int n = prices.size();
+        if (n <= 1) return 0;
+        if (k >= n / 2) {
+            int result = 0;
+            for (int i = 1; i < n; ++i) {
+                if (prices[i] > prices[i - 1]) {
+                    result += prices[i] - prices[i - 1];
+                }
+            }
+            return result;
+        }
+        vector<vector<int>> dp(n, vector<int>(k + 1, 0));
+        for (int i = 1; i < n; ++i) {
+            int diff = prices[i] - prices[i - 1];
+            for (int j = 1; j <= k; ++j) {
+                dp[i][j] = max(dp[i - 1][j] + diff, dp[i - 1][j - 1] + max(diff, 0));
+            }
+        }
+        return dp[n - 1][k];
+    }
+};
 
 int main()
 {

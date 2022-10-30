@@ -1,3 +1,3 @@
-/home/ryazur/src/leetcode/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/ryazur/src/leetcode/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ryazur/src/leetcode/cmake-build-debug/CMakeFiles/leetcode.dir
+D:/src/InterviewLevelUpProblems/cmake-build-debug/CMakeFiles/leetcode.dir
+D:/src/InterviewLevelUpProblems/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/src/InterviewLevelUpProblems/cmake-build-debug/CMakeFiles/rebuild_cache.dir
