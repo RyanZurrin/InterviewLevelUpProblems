@@ -413,3 +413,15 @@ unsigned int reverseBits(unsigned int n) {
     temp <<= count;
     return temp;
 }
+
+/**
+* isdigit(int val) checks if val is a digit. If it is, it returns -1  else if
+ * it is not, it returns 0.
+*/
+__attribute__((unused))
+int isdigit(int val) {
+    if (val >= '0' && val <= '9') {
+        return -1;
+    }
+    return 0;
+}

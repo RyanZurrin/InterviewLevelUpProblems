@@ -1,0 +1,4 @@
+E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8617.54\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\src\InterviewLevelUpProblems -B D:\src\InterviewLevelUpProblems\cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/src/InterviewLevelUpProblems/cmake-build-debug

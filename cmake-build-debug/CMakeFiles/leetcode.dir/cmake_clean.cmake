@@ -1,6 +1,12 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/leetcode.dir/SudokuSolver.cpp.obj"
+  "CMakeFiles/leetcode.dir/SudokuSolver.cpp.obj.d"
+  "CMakeFiles/leetcode.dir/isPrime.cpp.obj"
+  "CMakeFiles/leetcode.dir/isPrime.cpp.obj.d"
   "CMakeFiles/leetcode.dir/leet.c.obj"
   "CMakeFiles/leetcode.dir/leet.c.obj.d"
+  "CMakeFiles/leetcode.dir/leetCode.cpp.obj"
+  "CMakeFiles/leetcode.dir/leetCode.cpp.obj.d"
   "CMakeFiles/leetcode.dir/main.cpp.obj"
   "CMakeFiles/leetcode.dir/main.cpp.obj.d"
   "leetcode.exe"
