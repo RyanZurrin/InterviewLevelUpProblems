@@ -47,10 +47,10 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8617.54\bin\cmake\win\x64\bin\cmake.exe
+CMAKE_COMMAND = E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8836.42\bin\cmake\win\x64\bin\cmake.exe
 
 # The command to remove a file.
-RM = E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8617.54\bin\cmake\win\x64\bin\cmake.exe -E rm -f
+RM = E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8836.42\bin\cmake\win\x64\bin\cmake.exe -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -67,7 +67,7 @@ CMAKE_BINARY_DIR = D:\src\InterviewLevelUpProblems\cmake-build-debug
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8617.54\bin\cmake\win\x64\bin\cmake.exe -E echo "No interactive CMake dialog available."
+	E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8836.42\bin\cmake\win\x64\bin\cmake.exe -E echo "No interactive CMake dialog available."
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -77,7 +77,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8617.54\bin\cmake\win\x64\bin\cmake.exe --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	E:\Users\ryanz\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\223.8836.42\bin\cmake\win\x64\bin\cmake.exe --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -127,30 +127,6 @@ leetcode: cmake_check_build_system
 leetcode/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\leetcode.dir\build.make CMakeFiles/leetcode.dir/build
 .PHONY : leetcode/fast
-
-SudokuSolver.obj: SudokuSolver.cpp.obj
-.PHONY : SudokuSolver.obj
-
-# target to build an object file
-SudokuSolver.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\leetcode.dir\build.make CMakeFiles/leetcode.dir/SudokuSolver.cpp.obj
-.PHONY : SudokuSolver.cpp.obj
-
-SudokuSolver.i: SudokuSolver.cpp.i
-.PHONY : SudokuSolver.i
-
-# target to preprocess a source file
-SudokuSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\leetcode.dir\build.make CMakeFiles/leetcode.dir/SudokuSolver.cpp.i
-.PHONY : SudokuSolver.cpp.i
-
-SudokuSolver.s: SudokuSolver.cpp.s
-.PHONY : SudokuSolver.s
-
-# target to generate assembly for a file
-SudokuSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\leetcode.dir\build.make CMakeFiles/leetcode.dir/SudokuSolver.cpp.s
-.PHONY : SudokuSolver.cpp.s
 
 isPrime.obj: isPrime.cpp.obj
 .PHONY : isPrime.obj
@@ -257,9 +233,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... leetcode
-	@echo ... SudokuSolver.obj
-	@echo ... SudokuSolver.i
-	@echo ... SudokuSolver.s
 	@echo ... isPrime.obj
 	@echo ... isPrime.i
 	@echo ... isPrime.s

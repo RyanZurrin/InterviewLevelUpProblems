@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/leetcode.dir/SudokuSolver.cpp.obj"
-  "CMakeFiles/leetcode.dir/SudokuSolver.cpp.obj.d"
   "CMakeFiles/leetcode.dir/isPrime.cpp.obj"
   "CMakeFiles/leetcode.dir/isPrime.cpp.obj.d"
   "CMakeFiles/leetcode.dir/leet.c.obj"

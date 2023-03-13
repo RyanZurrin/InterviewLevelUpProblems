@@ -21,13 +21,13 @@ struct ListNode {
 };
 
 struct Node {
-    __attribute__((unused)) int val;
+     int val;
     struct Node *left;
     struct Node *right;
     struct Node *next;
 };
 
-__attribute__((unused))
+
 int maxPower(const char* s) {
     int max = 0;
     int count = 0;
@@ -49,7 +49,7 @@ int maxPower(const char* s) {
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-__attribute__((unused))
+
 int* sortedSquares(const int* nums, int numsSize, int* returnSize){
     int* result = malloc(sizeof(int) * numsSize);
     int i = 0;
@@ -68,7 +68,7 @@ int* sortedSquares(const int* nums, int numsSize, int* returnSize){
     return result;
 }
 // remove the elements from the back and add to front k times
-__attribute__((unused))
+
 void rotate(int* nums, int numsSize, int k){
     int* temp = malloc(sizeof(int) * numsSize);
     for (int i = 0; i < numsSize; i++) {
@@ -79,7 +79,6 @@ void rotate(int* nums, int numsSize, int k){
     }
 }
 
-__attribute__((unused))
 char * intToRoman(int num){
     char* result = malloc(sizeof(char) * 10);
     int i = 0;
@@ -135,7 +134,7 @@ char * intToRoman(int num){
     return result;
 }
 
-__attribute__((unused))
+
 void moveZeroes(int* nums, int numsSize){
     int i = 0;
     int j = 0;
@@ -166,7 +165,7 @@ int rangeSumBST(struct TreeNode* root, int low, int high){
 /**
  * Note: The returned array must be malloced, assume caller calls free().
  */
-__attribute__((unused))
+
 int* twoSum(const int* numbers, int numbersSize, int target, int* returnSize){
     int* result = malloc(sizeof(int) * 2);
     int i = 0;
@@ -186,7 +185,7 @@ int* twoSum(const int* numbers, int numbersSize, int target, int* returnSize){
     return result;
 }
 
-__attribute__((unused))
+
 void reverseString(char* s, int sSize){
     int i = 0;
     int j = sSize - 1;
@@ -200,7 +199,7 @@ void reverseString(char* s, int sSize){
 }
 
 
-__attribute__((unused))
+
 struct ListNode* middleNode(struct ListNode* head){
     struct ListNode* slow = head;
     struct ListNode* fast = head;
@@ -211,7 +210,7 @@ struct ListNode* middleNode(struct ListNode* head){
     return slow;
 }
 
-__attribute__((unused))
+
 struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
     struct ListNode* dummy = malloc(sizeof(struct ListNode));
     dummy->next = head;
@@ -228,7 +227,7 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n){
     return dummy->next;
 }
 
-__attribute__((unused))
+
 int lengthOfLongestSubstring(char * s){
     int i = 0;
     int j = 0;
@@ -253,7 +252,7 @@ int lengthOfLongestSubstring(char * s){
  * or false otherwise. In other words, return true if one of s1's permutations
  * is the substring of s2.
  */
-__attribute__((unused))
+
 bool checkInclusion(char * s1, char * s2){
     int len1 = strlen(s1);
     int len2 = strlen(s2);
@@ -315,7 +314,7 @@ int dfs(int **pInt, int size, int *pInt1, int i, int j, int *pInt2) {
  * The area of an island is the number of cells with a value 1 in the island.
  * @return the maximum area of an island in grid. If there is no island, return 0.
  */
-__attribute__((unused))
+
 int maxAreaOfIsland(int** grid, int gridSize, int* gridColSize){
     int** pInt = malloc(sizeof(int*) * gridSize);
     for (int i = 0; i < gridSize; i++) {
@@ -367,7 +366,7 @@ struct TreeNode* mergeTrees(struct TreeNode* root1, struct TreeNode* root2){
  * Initially, all next pointers are set to NULL.
  * @return
  */
-__attribute__((unused))
+
 struct Node* connect(struct Node* root) {
     if (root == NULL) {
         return NULL;
@@ -399,7 +398,7 @@ void printBinary(unsigned int num) {
 }
 
 // a bit reversal function
-__attribute__((unused))
+
 unsigned int reverseBits(unsigned int n) {
     unsigned int count = (INT_BITS - 1);
     unsigned int temp = n;
@@ -418,7 +417,7 @@ unsigned int reverseBits(unsigned int n) {
 * isdigit(int val) checks if val is a digit. If it is, it returns -1  else if
  * it is not, it returns 0.
 */
-__attribute__((unused))
+
 int isdigit(int val) {
     if (val >= '0' && val <= '9') {
         return -1;
