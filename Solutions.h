@@ -1366,7 +1366,24 @@ public:
         return ans;
     }
 
+    /**
+     * @brief checks if a string is a palindrome, removing all non-alphanumeric
+     * characters and converting to lowercase.
+     * @param basicString  string to check
+     * @return  true if palindrome, false otherwise
+     */
     static bool isPalindrome(string basicString) {
+        // remove all non-alphanumeric characters and convert to lowercase
+        basicString.erase(remove_if(basicString.begin(), basicString.end(), [](char c) {
+            return !isalnum(c);
+        }), basicString.end());
+        transform(basicString.begin(), basicString.end(), basicString.begin(), ::tolower);
+        if (basicString.length() == 1) {
+            return true;
+        }
+        if (basicString.length() == 2) {
+            return basicString[0] == basicString[1];
+        }
         int i = 0;
         int j = basicString.length() - 1;
         while (i < j) {
@@ -2967,6 +2984,41 @@ public:
             return a->val > b->val;
         }
     };
+
+    /**
+     * A subsequence of a string is a new string that is formed from the
+     * original string by deleting some (can be none) of the characters
+     * without disturbing the relative positions of the remaining characters.
+     * (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+     *
+     * Given two strings s and t, return the minimum number of subsequences
+     * of s such that their concatenation equals t. If the task is
+     * impossible, return -1.
+     *
+     * @param s the string source
+     * @param t the string target
+     * @return int the minimum number of subsequences of s such that their
+     * concatenation equals t. If the task is impossible, return -1.
+     */
+     int shortestWay(string s, string t) {
+        int result = 0;
+        int i = 0, j = 0;
+        while (j < t.size()) {
+            result++;
+            int prev = j;
+            while (i < s.size() && j < t.size()) {
+                if (s[i] == t[j]) {
+                    j++;
+                }
+                i++;
+            }
+            if (prev == j) {
+                return -1;
+            }
+            i = 0;
+        }
+        return result;
+    }
 
 
 };

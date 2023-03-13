@@ -11,13 +11,11 @@
 
 int main()
 {
-    string s = "aa";
-    string p1 = "a";
-    string p2 = "a*";
-    string p3 = ".*";
-    cout <<  Solutions::isMatch(s, p1) << endl;
-    cout <<  Solutions::isMatch(s, p2) << endl;
-    cout <<  Solutions::isMatch(s, p3) << endl;
+    string  s = "P";
+    Solutions solution;
+    cout << solution.isPalindrome(s) << endl;
+
+
 
     return 0;
 }
