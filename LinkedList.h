@@ -107,7 +107,6 @@ struct LinkedList {
         }
         return dummy->next;
     }
-
 };
 
 #endif //LEETCODE_LINKEDLIST_H

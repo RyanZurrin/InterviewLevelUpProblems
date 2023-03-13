@@ -5,7 +5,6 @@
 #ifndef LEETCODE_TREENODE_H
 #define LEETCODE_TREENODE_H
 
-
 struct TreeNode {
     int val;
     TreeNode *left;
