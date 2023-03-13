@@ -2936,6 +2936,39 @@ public:
         return s[i - 1] == p[j - 1];
     }
 
+    /**
+     * Given an array of k linked-lists lists, each linked-list is sorted is
+     * ascending order. Merge all the linked-lists into one sorted linked-list
+     * and return it.
+     * @param lists the vector of linked-lists
+     */
+    static ListNode* mergeKLists(vector<ListNode*>& lists) {
+        auto* dummy = new ListNode(0);
+        ListNode* tail = dummy;
+        priority_queue<ListNode*, vector<ListNode*>, cmp> pq;
+        for (auto list : lists) {
+            if (list) {
+                pq.push(list);
+            }
+        }
+        while (!pq.empty()) {
+            tail->next = pq.top();
+            pq.pop();
+            tail = tail->next;
+            if (tail->next) {
+                pq.push(tail->next);
+            }
+        }
+        return dummy->next;
+    }
+    // comparator for mergeKLists
+    struct cmp {
+        bool operator()(ListNode* a, ListNode* b) {
+            return a->val > b->val;
+        }
+    };
+
+
 };
 
 string Solutions::keypad[] = {"", "", "abc", "def", "ghi", "jkl", "mno",
