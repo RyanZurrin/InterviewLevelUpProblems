@@ -20,6 +20,5 @@ int main()
     cout <<  Solutions::isMatch(s, p2) << endl;
     cout <<  Solutions::isMatch(s, p3) << endl;
 
-
     return 0;
 }
