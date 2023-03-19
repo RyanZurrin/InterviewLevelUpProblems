@@ -118,6 +118,12 @@
 		<Unit filename="D:/src/InterviewLevelUpProblems/TreeNode.h">
 			<Option target="leetcode"/>
 		</Unit>
+		<Unit filename="D:/src/InterviewLevelUpProblems/TrieNode.h">
+			<Option target="leetcode"/>
+		</Unit>
+		<Unit filename="D:/src/InterviewLevelUpProblems/WordDictionary.h">
+			<Option target="leetcode"/>
+		</Unit>
 		<Unit filename="D:/src/InterviewLevelUpProblems/bt_node.h">
 			<Option target="leetcode"/>
 		</Unit>

@@ -30,6 +30,7 @@
 #include "BT.h"
 #include "t_BST.h"
 #include "SudokuSolver.h"
+#include "WordDictionary.h"
 
 // A macro that defines the size of an integer
 #define INT_SIZE sizeof(int) * 8

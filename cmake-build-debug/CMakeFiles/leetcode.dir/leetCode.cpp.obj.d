@@ -367,4 +367,6 @@ CMakeFiles/leetcode.dir/leetCode.cpp.obj: \
  D:\src\InterviewLevelUpProblems\BT.h \
  D:\src\InterviewLevelUpProblems\Pair.h \
  D:\src\InterviewLevelUpProblems\t_BST.h \
- D:\src\InterviewLevelUpProblems\SudokuSolver.h
+ D:\src\InterviewLevelUpProblems\SudokuSolver.h \
+ D:\src\InterviewLevelUpProblems\WordDictionary.h \
+ D:\src\InterviewLevelUpProblems\TrieNode.h

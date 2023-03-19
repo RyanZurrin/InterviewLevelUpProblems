@@ -11,9 +11,6 @@
 
 int main()
 {
-    string  s = "P";
-    Solutions solution;
-    cout << solution.isPalindrome(s) << endl;
 
 
 
