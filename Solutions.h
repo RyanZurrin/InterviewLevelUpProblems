@@ -3112,8 +3112,8 @@ public:
             parent[i] = i;
         }
         for (auto connection : connections) {
-            int x = find(parent, connection[0]);
-            int y = find(parent, connection[1]);
+            int x = _find(parent, connection[0]);
+            int y = _find(parent, connection[1]);
             if (x != y) {
                 parent[x] = y;
                 n--;
@@ -3123,9 +3123,9 @@ public:
 
     }
     // makeConnected helper function
-    int find(vector<int>& parent, int i) {
+    int _find(vector<int>& parent, int i) {
         if (parent[i] != i) {
-            parent[i] = find(parent, parent[i]);
+            parent[i] = _find(parent, parent[i]);
         }
         return parent[i];
     }
