@@ -31,6 +31,8 @@
 #include "t_BST.h"
 #include "SudokuSolver.h"
 #include "WordDictionary.h"
+#include "Graph.h"
+
 
 // A macro that defines the size of an integer
 #define INT_SIZE sizeof(int) * 8
@@ -3081,6 +3083,51 @@ public:
             }
         }
         return count == n;
+    }
+
+    /**
+     * There are n computers numbered from 0 to n - 1 connected by ethernet cables
+     * connections forming a network where connections[i] = [ai, bi] represents a
+     * connection between computers ai and bi. Any computer can reach any other
+     * computer directly or indirectly through the network.
+     *
+     * You are given an initial computer network connections. You can extract
+     * certain cables between two directly connected computers, and place them
+     * between any pair of disconnected computers to make them directly connected.
+     *
+     * Return the minimum number of times you need to do this in order to make
+     * all the computers connected. If it is not possible, return -1.
+     *
+     * @param n the number of computers
+     * @param connections the initial computer network connections
+     * @return int the minimum number of times you need to do this in order to
+     * make all the computers connected. If it is not possible, return -1.
+     */
+     int makeConnected(int n, vector<vector<int>>& connections) {
+        if (connections.size() < n - 1) {
+            return -1;
+        }
+        vector<int> parent(n);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+        for (auto connection : connections) {
+            int x = find(parent, connection[0]);
+            int y = find(parent, connection[1]);
+            if (x != y) {
+                parent[x] = y;
+                n--;
+            }
+        }
+        return n - 1;
+
+    }
+    // makeConnected helper function
+    int find(vector<int>& parent, int i) {
+        if (parent[i] != i) {
+            parent[i] = find(parent, parent[i]);
+        }
+        return parent[i];
     }
 
 
