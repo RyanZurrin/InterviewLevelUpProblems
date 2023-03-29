@@ -11,8 +11,6 @@
 
 int main()
 {
-    vector<int> satisfaction = {-1, -4, -5};
-    cout << Solutions::maxSatisfaction(satisfaction) << endl;
 
 
 

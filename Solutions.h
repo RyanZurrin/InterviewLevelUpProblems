@@ -32,6 +32,7 @@
 #include "SudokuSolver.h"
 #include "WordDictionary.h"
 #include "Graph.h"
+#include "RandomNode.h"
 
 
 // A macro that defines the size of an integer
@@ -3153,6 +3154,94 @@ public:
         return result;
     }
 
+    /**
+     * You have planned some train traveling one year in advance. The days of
+     * the year in which you will travel are given as an integer array days.
+     * Each day is an integer from 1 to 365.
+     * Train tickets are sold in three different ways:
+     * a 1-day pass is sold for costs[0] dollars;
+     * a 7-day pass is sold for costs[1] dollars;
+     * a 30-day pass is sold for costs[2] dollars.
+     * The passes allow that many days of consecutive travel. For example, if we
+     * get a 7-day pass on day 2, then we can travel for 7 days: day 2, 3, 4, 5,
+     * 6, 7, and 8.
+     *
+     * Return the minimum number of dollars you need to travel every day in the
+     * given list of days.
+     */
+    int mincostTickets(vector<int>& days,
+                       vector<int>& costs,
+                       vector<int> durations = {1, 7, 30}) {
+        int n = days.size();
+        vector<int> dp(n + 1);
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = INT_MAX;
+            int j = i;
+            for (int k = 0; k < 3; k++) {
+                while (j < n && days[j] < days[i] + durations[k]) {
+                    j++;
+                }
+                dp[i] = min(dp[i], costs[k] + dp[j]);
+            }
+        }
+        return dp[0];
+    }
+
+    /**
+     * 1485. Clone Binary Tree With Random Pointer
+     * A binary tree is given such that each node contains an additional random
+     * pointer which could point to any node in the tree or null.
+     * Return a deep copy of the tree.
+     * The tree is represented in the same input/output way as normal binary
+     * trees where each node is represented as a pair of [val, random_index]
+     * where:
+     * val: an integer representing Node.val
+     * random_index: the index of the node (in the input) where the random
+     * pointer points to, or null if it does not point to any node.
+     * You will be given the tree in class Node and you should return the
+     * cloned tree in class NodeCopy. NodeCopy class is just a clone of Node
+     * class with the same attributes and constructors.
+     * @param root the root of the binary tree
+     *
+     * @return NodeCopy* the root of the cloned binary tree
+     */
+    RandomNodeCopy* copyRandomBinaryTree(RandomNode* root) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        unordered_map<RandomNode*, RandomNodeCopy*> m;
+        queue<RandomNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            RandomNode* node = q.front();
+            q.pop();
+            if (m.find(node) == m.end()) {
+                m[node] = new RandomNodeCopy(node->val);
+            }
+            if (node->left != nullptr) {
+                if (m.find(node->left) == m.end()) {
+                    m[node->left] = new RandomNodeCopy(node->left->val);
+                    q.push(node->left);
+                }
+                m[node]->left = m[node->left];
+            }
+            if (node->right != nullptr) {
+                if (m.find(node->right) == m.end()) {
+                    m[node->right] = new RandomNodeCopy(node->right->val);
+                    q.push(node->right);
+                }
+                m[node]->right = m[node->right];
+            }
+            if (node->random != nullptr) {
+                if (m.find(node->random) == m.end()) {
+                    m[node->random] = new RandomNodeCopy(node->random->val);
+                    q.push(node->random);
+                }
+                m[node]->random = m[node->random];
+            }
+        }
+        return m[root];
+    }
 
 
 };
