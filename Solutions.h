@@ -3242,6 +3242,121 @@ public:
         }
         return m[root];
     }
+    /**
+     * 1444. Number of Ways of Cutting a Pizza
+     * Given a rectangular pizza represented as a rows x cols matrix containing
+     * the following characters: 'A' (an apple) and '.' (empty cell) and given
+     * the integer k. You have to cut the pizza into k pieces using k-1 cuts.
+     * For each cut you choose the direction: vertical or horizontal, then you
+     * choose a cut position at the cell boundary and cut the pizza into two
+     * pieces. If you cut the pizza vertically, give the left part of the pizza
+     * to a person. If you cut the pizza horizontally, give the upper part of
+     * the pizza to a person. Give the last piece of pizza to the last person.
+     * Return the number of ways of cutting the pizza such that each piece
+     * contains at least one apple. Since the answer can be a huge number,
+     * return this modulo 10^9 + 7.
+     * @param pizza the pizza
+     * @param k the number of cuts
+     * @return int the number of ways of cutting the pizza
+     * such that each piece contains at least one apple
+     * modulo 10^9 + 7
+     */
+     static int ways(vector<string>& pizza, int k) {
+        int m = pizza.size();
+        int n = pizza[0].size();
+        vector<vector<int>> sum(m + 1, vector<int>(n + 1));
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                sum[i][j] = sum[i + 1][j] + sum[i][j + 1] - sum[i + 1][j + 1] +
+                            (pizza[i][j] == 'A');
+            }
+        }
+        vector<vector<vector<int>>> dp(
+            m, vector<vector<int>>(n, vector<int>(k + 1)));
+        return _ways(pizza, sum, dp, 0, 0, k);
+    }
+
+    static int _ways(vector<string>& pizza,
+              vector<vector<int>>& sum,
+              vector<vector<vector<int>>>& dp,
+              int i,
+              int j,
+              int k,
+              int MOD = 1e9 + 7) {
+        int m = pizza.size();
+        int n = pizza[0].size();
+        if (sum[i][j] == 0) {
+            return 0;
+        }
+        if (k == 1) {
+            return 1;
+        }
+        if (dp[i][j][k] > 0) {
+            return dp[i][j][k];
+        }
+        int ways = 0;
+        for (int x = i + 1; x < m; x++) {
+            if (sum[i][j] - sum[x][j] > 0) {
+                ways = (ways + _ways(pizza, sum, dp, x, j, k - 1)) % MOD;
+            }
+        }
+        for (int y = j + 1; y < n; y++) {
+            if (sum[i][j] - sum[i][y] > 0) {
+                ways = (ways + _ways(pizza, sum, dp, i, y, k - 1)) % MOD;
+            }
+        }
+        dp[i][j][k] = ways;
+        return ways;
+    }
+
+    /**
+     * 2405. Optimal Partition of String
+     * Given a string s, partition the string into one or more substrings such
+     * that the characters in each substring are unique. That is, no letter
+     * appears in a single substring more than once.
+     *
+     * Return the minimum number of substrings in such a partition. Note that
+     * each character should belong to exactly one substring in a partition.
+     *
+     * Example 1:
+        Input: s = "abacaba"
+        Output: 4
+        Explanation:
+        Two possible partitions are ("a","ba","cab","a") and ("ab","a","ca","ba").
+        It can be shown that 4 is the minimum number of substrings needed.
+
+
+     * Example 2:
+        Input: s = "ssssss"
+        Output: 6
+        Explanation:
+        The only valid partition is ("s","s","s","s","s","s").
+
+     * @param s the string
+     * @return int the minimum number of substrings in such a partition
+     * such that each character should belong to exactly one substring
+     * in a partition
+     */
+    static int minPartition(string s) {
+        int n = s.size();
+        vector<int> dp(n + 1);
+        for (int i = 1; i <= n; i++) {
+            dp[i] = i;
+            unordered_set<char> seen;
+            for (int j = i; j >= 1; j--) {
+                if (seen.find(s[j - 1]) != seen.end()) {
+                    break;
+                }
+                seen.insert(s[j - 1]);
+                dp[i] = min(dp[i], dp[j - 1] + 1);
+            }
+        }
+        return dp[n];
+    }
+
+
+
+
 
 
 };
