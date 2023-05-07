@@ -1878,7 +1878,7 @@ public:
     }
 
     template<typename T>
-    static int lower_bound(vector<T> a, T key) {
+    static int lowerbound(vector<T> a, T key) {
         int low = 0;
         int high = a.size() - 1;
         int index = -1;
@@ -1897,7 +1897,7 @@ public:
     }
 
     template <typename T>
-    static int upper_bound(vector<T> a, T key) {
+    static int upperbound(vector<T> a, T key) {
         int low = 0;
         int high = a.size() - 1;
         int index = -1;
@@ -1917,8 +1917,8 @@ public:
 
     template <typename T>
     static int frequency(vector<T> a, T key) {
-        int low = lower_bound(a, key);
-        int high = upper_bound(a, key);
+        int low = lowerbound(a, key);
+        int high = upperbound(a, key);
         if (low == -1 || high == -1) {
             return 0;
         }
@@ -2026,7 +2026,7 @@ public:
         int diff = INT_MAX;
         // iterate over a1 and look for closest elements in a2
         for (T x : a1) {
-            auto lb = lower_bound(a2.begin(), a2.end(), x) - a2.begin();
+            auto lb = lowerbound(a2.begin(), a2.end(), x) - a2.begin();
 
             if (lb >= 1 && x - a2[lb-1] < diff) {
                 diff = x - a2[lb-1];
@@ -3310,7 +3310,8 @@ public:
     }
 
     /**
-     * 2405. Optimal Partition of String
+     * 2405.
+     * Optimal Partition of String
      * Given a string s, partition the string into one or more substrings such
      * that the characters in each substring are unique. That is, no letter
      * appears in a single substring more than once.
@@ -3353,6 +3354,112 @@ public:
         }
         return dp[n];
     }
+
+    /**
+     * 1964 Find the Longest Valid Obstacle Course at Each Position
+     *
+     You want to build some obstacle courses. You are given a 0-indexed integer
+     array obstacles of length n, where obstacles[i] describes the height of the
+     ith obstacle.
+
+     For every index i between 0 and n - 1 (inclusive), find the length of the
+     longest obstacle course in obstacles such that:
+        - You choose any number of obstacles between 0 and i inclusive.
+        - You must include the ith obstacle in the course.
+        - You must put the chosen obstacles in the same order as they appear
+          in obstacles.
+     Every obstacle (except the first) is taller than or the same height as the
+     obstacle immediately before it.
+     Return an array ans of length n, where ans[i] is the length of the
+     longest obstacle course for index i as described above.
+     *
+     * Example 1:
+        Input: obstacles = [1,2,3,2]
+        Output: [1,2,3,3]
+        Explanation: The longest valid obstacle course at each position is:
+        - i = 0: [1], [1] has length 1.
+        - i = 1: [1,2], [1,2] has length 2.
+        - i = 2: [1,2,3], [1,2,3] has length 3.
+        - i = 3: [1,2,3,2], [1,2,2] has length 3.
+
+     * Example 2:
+        Input: obstacles = [2,2,1]
+        Output: [1,2,1]
+        Explanation: The longest valid obstacle course at each position is:
+        - i = 0: [2], [2] has length 1.
+        - i = 1: [2,2], [2,2] has length 2.
+        - i = 2: [2,2,1], [1] has length 1.
+
+     * Example 3:
+        Input: obstacles = [3,1,5,6,4,2]
+        Output: [1,1,2,3,2,2]
+        Explanation: The longest valid obstacle course at each position is:
+        - i = 0: [3], [3] has length 1.
+        - i = 1: [3,1], [1] has length 1.
+        - i = 2: [3,1,5], [3,5] has length 2. [1,5] is also valid.
+        - i = 3: [3,1,5,6], [3,5,6] has length 3. [1,5,6] is also valid.
+        - i = 4: [3,1,5,6,4], [3,4] has length 2. [1,4] is also valid.
+        - i = 5: [3,1,5,6,4,2], [1,2] has length 2.
+
+     * Constraints:
+        n == obstacles.length
+        1 <= n <= 105
+        1 <= obstacles[i] <= 107
+     *
+     * @param obstacles the obstacles
+     * @return vector<int> the length of the longest obstacle course for index i
+     * as described above
+     */
+    static vector<int> longestObstacleCourseAtEachPositionTU(vector<int>&
+            obstacles) {
+        // use dynamic programming top-down approach
+        int n = obstacles.size();
+        vector<int> dp(n + 1, 0);
+        vector<int> ans(n);
+        for (int i = 0; i < n; i++) {
+            ans[i] = _longestObstacleCourseAtEachPosition(obstacles, dp, i);
+        }
+        return ans;
+    }
+    // helper function for longestObstacleCourseAtEachPosition
+    static int _longestObstacleCourseAtEachPosition(vector<int>& obstacles,
+                                                    vector<int>& dp, int i) {
+        if (dp[i] > 0) {
+            return dp[i];
+        }
+        int ans = 1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (obstacles[j] <= obstacles[i]) {
+                ans = max(ans, _longestObstacleCourseAtEachPosition(obstacles, dp, j) + 1);
+            }
+        }
+        dp[i] = ans;
+        return ans;
+    }
+
+    // use dynamic programming bottom-up approach
+    static vector<int> longestObstacleCourseAtEachPosition(vector<int>&
+            obstacles) {
+        int n = obstacles.size();
+        vector<int> ans(n);
+        vector<int> tails;
+        tails.reserve(n);
+
+        for (int i = 0; i < n; i++) {
+            auto it = lower_bound(tails.begin(), tails.end(), obstacles[i] + 1);
+            int len = it - tails.begin() + 1;
+            ans[i] = len;
+            if (it == tails.end()) {
+                tails.push_back(obstacles[i]);
+            } else {
+                *it = obstacles[i];
+            }
+        }
+        return ans;
+    }
+
+
+
 
 
 

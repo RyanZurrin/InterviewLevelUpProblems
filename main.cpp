@@ -4765,7 +4765,7 @@
 //    return make_pair(start, end + 1);
 //}
 //template<typename T>
-//int lower_bound(vector<T> a, T key) {
+//int lowerbound(vector<T> a, T key) {
 //    int low = 0;
 //    int high = a.size() - 1;
 //    int index = -1;
@@ -4784,7 +4784,7 @@
 //}
 //
 //template <typename T>
-//int upper_bound(vector<T> a, T key) {
+//int upperbound(vector<T> a, T key) {
 //    int low = 0;
 //    int high = a.size() - 1;
 //    int index = -1;
@@ -4804,8 +4804,8 @@
 //
 //template <typename T>
 // int frequency(vector<T> a, T key) {
-//    int low = lower_bound(a, key);
-//    int high = upper_bound(a, key);
+//    int low = lowerbound(a, key);
+//    int high = upperbound(a, key);
 //    if (low == -1 || high == -1) {
 //        return 0;
 //    }
@@ -4913,7 +4913,7 @@
 //    int diff = INT_MAX;
 //    // iterate over a1 and look for closest elements in a2
 //    for (T x : a1) {
-//        auto lb = lower_bound(a2.begin(), a2.end(), x) - a2.begin();
+//        auto lb = lowerbound(a2.begin(), a2.end(), x) - a2.begin();
 //
 //        if (lb >= 1 && x - a2[lb-1] < diff) {
 //            diff = x - a2[lb-1];
