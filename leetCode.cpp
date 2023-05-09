@@ -35,8 +35,5 @@ int main()
     printMatrix(Solutions::multiply(mat1, mat2));
 
 
-
-
-
     return 0;
 }
