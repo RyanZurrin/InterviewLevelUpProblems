@@ -3458,6 +3458,45 @@ public:
         return ans;
     }
 
+    /**
+     * 311. Sparse Matrix Multiplication
+     * Given two sparse matrices mat1 of size m x k and mat2 of size k x n,
+     * return the result of mat1 x mat2. You may assume that multiplication
+     * is always possible.
+     * Example 1:
+     * Input: mat1 = [[1,0,0],[-1,0,3]], mat2 = [[7,0,0],[0,0,0],[0,0,1]]
+     * Output: [[7,0,0],[-7,0,3]]
+     * Example 2:
+     * Input: mat1 = [[0]], mat2 = [[0]]
+     * Output: [[0]]
+     * Constraints:
+     * m == mat1.length
+     * k == mat1[i].length == mat2.length
+     * n == mat2[i].length
+     * 1 <= m, n, k <= 100
+     * -100 <= mat1[i][j], mat2[i][j] <= 100
+     * @param mat1 the first matrix
+     * @param mat2 the second matrix
+     * @return the result of mat1 x mat2
+     */
+     static vector<vector<int>> multiply(vector<vector<int>>& mat1,
+                                         vector<vector<int>>& mat2) {
+        int m = mat1.size();
+        int k = mat1[0].size();
+        int n = mat2[0].size();
+        vector<vector<int>> ans(m, vector<int>(n, 0));
+        for (int i = 0; i < m; i++) {
+            for (int p = 0; p < k; p++) {
+                if (mat1[i][p] != 0) {
+                    for (int j = 0; j < n; j++) {
+                        ans[i][j] += mat1[i][p] * mat2[p][j];
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+
 
 
 
