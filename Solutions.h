@@ -43,9 +43,96 @@ using namespace std;
 class Solutions {
 public:
     static string keypad[];
+    // add smart pointers to all the classes that need to be accessed
+    // from main.cpp
+
+    template<typename T>
+    static void printVector(vector<T> &v) {
+        for (auto &i : v) {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+
+    template<typename T>
+    static void printVector(vector<vector<T>> &v) {
+        for (auto &i : v) {
+            for (auto &j : i) {
+                cout << j << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+
+
 public:
     Solutions() = default;
     ~Solutions() = default;
+
+    /**
+     * 1. Two Sum
+     * @brief Given an array of integers numbers and an integer target,
+     * return indices of the two numbers such that they add up to target.
+     * @param numbers  The numbers array
+     * @param target    The target number
+     * @return  The indices of the two numbers such that they add up to target
+     */
+    static vector<int> twoSum(vector<int>& numbers, int target) {
+        vector<int> res;
+        int left = 0, right = numbers.size() - 1;
+        while (left < right) {
+            int sum = numbers[left] + numbers[right];
+            if (sum == target) {
+                res.push_back(left + 1);
+                res.push_back(right + 1);
+                return res;
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 2. Add Two Numbers
+     * @brief Given two non-empty linked lists representing two non-negative integers.
+     * The digits are stored in reverse order, and each of their nodes contains
+     * a single digit. Add the two numbers and return the sum as a linked list.
+     * You may assume the two numbers do not contain any leading zero, except
+     * the number 0 itself.
+     * @param l1 linked list 1
+     * @param l2 linked list 2
+     * @return sum of the two linked lists
+     */
+    static ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        auto *result = new ListNode();
+        ListNode *curr = result;
+        int carry = 0;
+        while (l1 || l2) {
+            int sum = 0;
+            if (l1) {
+                sum += l1->val;
+                l1 = l1->next;
+            }
+            if (l2) {
+                sum += l2->val;
+                l2 = l2->next;
+            }
+            sum += carry;
+            carry = sum / 10;
+            sum = sum % 10;
+            curr->next = new ListNode(sum);
+            curr = curr->next;
+        }
+        if (carry > 0) {
+            curr->next = new ListNode(carry);
+        }
+        return result->next;
+    }
+
 
     static int absDifference(int a, int b) {
         return abs(a - b);
@@ -343,23 +430,6 @@ public:
         return sum;
     }
 
-    static vector<int> twoSum(vector<int>& numbers, int target) {
-        vector<int> res;
-        int left = 0, right = numbers.size() - 1;
-        while (left < right) {
-            int sum = numbers[left] + numbers[right];
-            if (sum == target) {
-                res.push_back(left + 1);
-                res.push_back(right + 1);
-                return res;
-            } else if (sum < target) {
-                left++;
-            } else {
-                right--;
-            }
-        }
-        return res;
-    }
 
     static void reverseString(vector<char>& s) {
         int left = 0, right = s.size() - 1;
@@ -600,9 +670,10 @@ public:
 
 
     /**
-     * You are given an m x n binary matrix grid. An island is a group of 1's
-     * (representing land) connected 4-directionally (horizontal or vertical.)
-     * You may assume all four edges of the grid are surrounded by water.
+     * 695. You are given an m x n binary matrix grid. An island is a group of
+     * 1's (representing land) connected 4-directionally
+     * (horizontal or vertical.) You may assume all four edges of the grid
+     * are surrounded by water.
      * The area of an island is the number of cells with a value 1 in the island.
      * @return the maximum area of an island in grid. If there is no island, return 0.
      */
@@ -645,6 +716,7 @@ public:
     }
 
     /**
+     * 617. Merge Two Binary Trees
      * You are given two binary trees root1 and root2. Imagine that when you put
      * one of them to cover the other, some nodes of the two trees are overlapped
      * while the others are not. You need to merge the two trees into a new binary
@@ -3155,9 +3227,9 @@ public:
     }
 
     /**
-     * You have planned some train traveling one year in advance. The days of
-     * the year in which you will travel are given as an integer array days.
-     * Each day is an integer from 1 to 365.
+     * 983. You have planned some train traveling one year in advance. The
+     * days of the year in which you will travel are given as an integer
+     * array days. Each day is an integer from 1 to 365.
      * Train tickets are sold in three different ways:
      * a 1-day pass is sold for costs[0] dollars;
      * a 7-day pass is sold for costs[1] dollars;
@@ -3479,7 +3551,7 @@ public:
      * @param mat2 the second matrix
      * @return the result of mat1 x mat2
      */
-     static vector<vector<int>> multiply(vector<vector<int>>& mat1,
+    static vector<vector<int>> multiply(vector<vector<int>>& mat1,
                                          vector<vector<int>>& mat2) {
         int m = mat1.size();
         int k = mat1[0].size();
@@ -3494,6 +3566,57 @@ public:
                 }
             }
         }
+        return ans;
+    }
+
+
+    /**
+     * 2466. Count Ways To Build Good Strings
+     * @brief Given the integers zero, one, low, nad high, we can construct a
+     * string by starting with an empty string, and then at each step perform
+     * either of the following:
+     * 1. Append the character '0' zero times.
+     * 2. Append the character '1' one time.
+     * This can be performed any number of time.
+     * A good string is a string constructed by the above process having a
+     * length between low and high, inclusive.
+     * Return the number of different good strings that can be constructed
+     * satisfying these properties. Since the answer can be large, return it
+     * modulo 10^9 + 7.
+     *
+     * Example 1:
+     * Input: low = 3, high = 3, zero = 1, one = 1
+     * Output: 8
+     * Explanation:
+     * One possible valid good string is "011". It can be constructed as
+     * follows: "" -> "0" -> "01" -> "011". All binary strings from "000" to
+     * "111" are good strings in this example.
+     *
+     * Example 2:
+     * Input: low = 2, high = 3, zero = 1, one = 2
+     * Output: 5
+     * Explanation:
+     * The good strings are "00", "11", "000", "110", and "011".
+     *
+     * Constraints:
+     * 1 <= low <= high <= 10^5
+     * 1 <= zero, one <= low
+     */
+    static int countGoodStrings(int low, int high, int zero, int one) {
+        constexpr int kMod = 1e9 + 7;
+        int ans = 0;
+        vector<int> dp(high + 1);
+        dp[0] = 1;
+
+        for (int i = 1; i <= high; i++) {
+            if (i >= zero)
+                dp[i] = (dp[i] + dp[i - zero]) % kMod;
+            if (i >= one)
+                dp[i] = (dp[i] + dp[i - one]) % kMod;
+            if (i >= low)
+                ans = (ans + dp[i]) % kMod;
+        }
+
         return ans;
     }
 

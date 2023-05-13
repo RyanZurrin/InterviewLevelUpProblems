@@ -7,6 +7,7 @@
 #pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
 #pragma ide diagnostic ignored "misc-no-recursion"
 #include "Solutions.h"
+typedef Solutions S;
 
 void printVector(const vector<int>& vec)
 {
@@ -29,10 +30,13 @@ void printMatrix(const vector<vector<int>>& mat)
 
 int main()
 {
-    vector<vector<int>> mat1 = {{1,0,0}, {-1, 0, 3}};
-    vector<vector<int>> mat2 = {{7,0,0}, {0,0,0}, {0,0,1}};
+    int low = 3;
+    int high = 3;
+    int zero = 1;
+    int one = 1;
 
-    printMatrix(Solutions::multiply(mat1, mat2));
+    cout << S::countGoodStrings(low, high, zero, one) << endl;
+
 
 
     return 0;
