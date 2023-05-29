@@ -3620,6 +3620,46 @@ public:
         return ans;
     }
 
+    /**
+     * 1799. Maximize Score After N Operations
+     * You are given nums, an array of positive integers of size 2 * n. You
+     * must perform n operations on this array.
+     * In the ith operation (1-indexed), you will:
+     * Choose two elements, x and y.
+     * Receive a score of i * gcd(x, y).
+     * Remove x and y from nums.
+     * Return the maximum score you can receive after performing n operations.
+     * The function gcd(x, y) is the greatest common divisor of x and y.
+     */
+    static int maxScore(vector<int>& nums) {
+        int n = nums.size(), N = 1 << n, M = n / 2;
+        vector<vector<int>> gcd(n, vector<int>(n));
+        for (int i = 0; i < n; i++)
+            for (int j = i + 1; j < n; ++j)
+                gcd[i][j] = gcd[j][i] = __gcd(nums[i], nums[j]);
+
+        vector<int> dp(N);
+        for (int mask = 0; mask < N; ++mask) {
+            int cnt = __builtin_popcount(mask);
+            if (cnt % 2) continue;
+            cnt /= 2;
+            for (int i = 0; i < n; ++i) {
+                if ((mask >> i) & 1) continue;
+                for (int j = i + 1; j < n; ++j) {
+                    if ((mask >> j) & 1) continue;
+                    dp[mask | (1 << i) | (1 << j)] = max(dp[mask | (1 << i) | (1 << j)],
+                                                         dp[mask] + (cnt + 1) * gcd[i][j]);
+                }
+            }
+        }
+        return dp[N - 1];
+    }
+
+    /**
+     *
+     */
+
+
 
 
 
