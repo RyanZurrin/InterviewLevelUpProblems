@@ -3657,12 +3657,181 @@ public:
         return dp[N - 1];
     }
 
+    /**
+     * 1230. Toss Strange Coins
+     * You have some coins.  The i-th coin has a probability prob[i] of facing
+     * heads when tossed.
+     * Return the probability that the number of coins facing heads equals
+     * target if you toss every coin exactly once.
+     *
+     * Example 1:
+     * Input: prob = [0.4], target = 1
+     * Output: 0.40000
+     *
+     * Example 2:
+     * Input: prob = [0.5,0.5,0.5,0.5,0.5], target = 0
+     * Output: 0.03125
+     *
+     * Constraints:
+     * 1 <= prob.length <= 1000
+     * 0 <= prob[i] <= 1
+     * 0 <= target <= prob.length
+     * Answers will be accepted as correct if they are within 10^-5 of the
+     */
+     static double probabilityOfHeads(vector<double>& prob, int target) {
+        int n = prob.size();
+        vector<double> dp(target + 1);
+        dp[0] = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = min(i + 1, target); j >= 0; j--) {
+                dp[j] = (j > 0 ? dp[j - 1] : 0) * prob[i] + dp[j] * (1 - prob[i]);
+            }
+        }
+        return dp[target];
+    }
 
+    /**
+     * @brief 1376. Time Needed to Inform All Employees
+     * A company has n employees with a unique ID for each employee from 0 to
+     * n - 1. The head of the company is the one with headID.
+     * Each employee has one direct manager given in the manager array where
+     * manager[i] is the direct manager of the i-th employee, manager[headID] =
+     * -1. Also it's guaranteed that the subordination relationships have a tree
+     * structure.
+     * The head of the company wants to inform all the employees of the company
+     * of an urgent piece of news. He will inform his direct subordinates and
+     * they will inform their subordinates and so on until all employees know
+     * about the urgent news.
+     * The i-th employee needs informTime[i] minutes to inform all of his
+     * direct subordinates (i.e After informTime[i] minutes, all his direct
+     * subordinates can start spreading the news).
+     * Return the number of minutes needed to inform all the employees about
+     * the urgent news.
+     *
+     * Example 1:
+     * Input: n = 1, headID = 0, manager = [-1], informTime = [0]
+     * Output: 0
+     * Explanation: The head of the company is the only employee in the company.
+     *
+     * Example 2:
+     * Input: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0, 1,0,0,0]
+     * Output: 1
+     * Explanation: The head of the company with id = 2 is the direct manager of
+     * all the employees in the company and needs 1 minute to inform them all.
+     *
+     * constraints:
+     * 1 <= n <= 10^5
+     * 0 <= headID < n
+     * manager.length == n
+     * 0 <= manager[i] < n
+     * manager[headID] == -1
+     * informTime.length == n
+     * 0 <= informTime[i] <= 1000
+     * informTime[i] == 0 if employee i has no subordinates.
+     * It is guaranteed that all the employees can be informed.
+     */
+     static int numOfMinutes(
+             int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<vector<int>> adj(n);
+        for (int i = 0; i < n; i++) {
+            if (manager[i] != -1)
+                adj[manager[i]].push_back(i);
+        }
+        return _numOfMinutes(adj, headID, informTime);
+    }
+    static int _numOfMinutes(
+            vector<vector<int>>& adj, int headID, vector<int>& informTime) {
+        int res = 0;
+        for (int i = 0; i < adj[headID].size(); i++) {
+            res = max(res, _numOfMinutes(adj, adj[headID][i], informTime));
+        }
+        return res + informTime[headID];
+    }
 
+    /**
+     * @brief 1377. Frog Position After T Seconds
+     * Given an undirected tree consisting of n vertices numbered from 1 to n.
+     * A frog starts jumping from the vertex 1. In one second, the frog jumps
+     * from its current vertex to another unvisited vertex if they are directly
+     * connected. The frog can not jump back to a visited vertex. In case the
+     * frog can jump to several vertices it jumps randomly to one of them with
+     * the same probability, otherwise, when the frog can not jump to any
+     * unvisited vertex it jumps forever on the same vertex.
+     * The edges of the undirected tree are given in the array edges, where
+     * edges[i] = [fromi, toi] means that exists an edge connecting directly
+     * the vertices fromi and toi.
+     * Return the probability that after t seconds the frog is on the vertex
+     * target.
+     *
+     * Example 1:
+     * Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 2,
+     * target = 4
+     * Output: 0.16666666666666666
+     * Explanation: The figure above shows the given graph. The frog starts at
+     * vertex 1, jumping with 1/3 probability to the vertex 2 after second 1
+     * and then jumping with 1/2 probability to vertex 4 after second 2. Thus
+     * the probability for the frog is on the vertex 4 after 2 seconds is
+     * 1/3 * 1/2 = 1/6 = 0.16666666666666666.
+     *
+     * Example 2:
+     * Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 1,
+     * target = 7
+     * Output: 0.3333333333333333
+     * Explanation: The figure above shows the given graph. The frog starts at
+     * vertex 1, jumping with 1/3 = 0.3333333333333333 probability to the vertex
+     * 7
+     * after second 1.
+     * Example 3:
+     * Input: n = 7, edges = [[1,2],[1,3],[1,7],[2,4],[2,6],[3,5]], t = 20,
+     * target = 6
+     * Output: 0.16666666666666666
+     *
+     * Constraints:
+     * 1 <= n <= 100
+     * edges.length == n-1
+     * edges[i].length == 2
+     * 1 <= edges[i][0], edges[i][1] <= n
+     * 1 <= t <= 50
+     * 1 <= target <= n
+     * Answers within 10^-5 of the actual value will be accepted as correct.
+     */
+    static double frogPosition(
+            int n, vector<vector<int>>& edges, int t, int target) {
+        vector<vector<int>> adj(n + 1);
+        for (int i = 0; i < edges.size(); i++) {
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
+        }
+        vector<bool> visited(n + 1, false);
+        visited[1] = true;
+        return _frogPosition(adj, visited, 1, t, target);
+    }
 
-
-
-
+    static double _frogPosition(
+            vector<vector<int>>& adj, vector<bool>& visited, int cur, int t,
+            int target) {
+        if (t == 0) {
+            if (cur == target) return 1.0;
+            else return 0.0;
+        }
+        double res = 0.0;
+        int count = 0;
+        for (int i = 0; i < adj[cur].size(); i++) {
+            if (!visited[adj[cur][i]]) count++;
+        }
+        if (count == 0) {
+            if (cur == target) return 1.0;
+            else return 0.0;
+        }
+        for (int i = 0; i < adj[cur].size(); i++) {
+            if (!visited[adj[cur][i]]) {
+                visited[adj[cur][i]] = true;
+                res += _frogPosition(adj, visited, adj[cur][i], t - 1, target);
+                visited[adj[cur][i]] = false;
+            }
+        }
+        return res / count;
+    }
 
 
 
