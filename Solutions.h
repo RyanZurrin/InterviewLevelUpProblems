@@ -3649,8 +3649,9 @@ public:
                 if ((mask >> i) & 1) continue;
                 for (int j = i + 1; j < n; ++j) {
                     if ((mask >> j) & 1) continue;
-                    dp[mask | (1 << i) | (1 << j)] = max(dp[mask | (1 << i) | (1 << j)],
-                                                         dp[mask] + (cnt + 1) * gcd[i][j]);
+                    dp[mask | (1 << i) | (1 << j)] =
+                            max(dp[mask | (1 << i) | (1 << j)],
+                                dp[mask] + (cnt + 1) * gcd[i][j]);
                 }
             }
         }
@@ -3678,7 +3679,7 @@ public:
      * 0 <= target <= prob.length
      * Answers will be accepted as correct if they are within 10^-5 of the
      */
-     static double probabilityOfHeads(vector<double>& prob, int target) {
+    static double probabilityOfHeads(vector<double>& prob, int target) {
         int n = prob.size();
         vector<double> dp(target + 1);
         dp[0] = 1;
@@ -3730,8 +3731,8 @@ public:
      * informTime[i] == 0 if employee i has no subordinates.
      * It is guaranteed that all the employees can be informed.
      */
-     static int numOfMinutes(
-             int n, int headID, vector<int>& manager, vector<int>& informTime) {
+    static int numOfMinutes(
+            int n, int headID, vector<int>& manager, vector<int>& informTime) {
         vector<vector<int>> adj(n);
         for (int i = 0; i < n; i++) {
             if (manager[i] != -1)
@@ -3832,6 +3833,175 @@ public:
         }
         return res / count;
     }
+
+    /**
+     * 1232. Check If It Is a Straight Line
+     * You are given an array coordinates, coordinates[i] = [x, y], where [x, y]
+     * represents the coordinate of a point. Check if these points make a
+     * straight line in the XY plane.
+     *
+     * Example 1:
+     * Input: coordinates = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]]
+     * Output: true
+     *
+     * Example 2:
+     * Input: coordinates = [[1,1],[2,2],[3,4],[4,5],[5,6],[7,7]]
+     * Output: false
+     *
+     * Constraints:
+     * 2 <= coordinates.length <= 1000
+     * coordinates[i].length == 2
+     * -10^4 <= coordinates[i][0], coordinates[i][1] <= 10^4
+     * coordinates contains no duplicate point.
+     */
+    static bool checkStraightLine(vector<vector<int>>& coordinates) {
+        if (coordinates.size() <= 2) return true;
+        int x0 = coordinates[0][0], y0 = coordinates[0][1];
+        int x1 = coordinates[1][0], y1 = coordinates[1][1];
+        for (int i = 2; i < coordinates.size(); i++) {
+            int x2 = coordinates[i][0], y2 = coordinates[i][1];
+            if ((y1 - y0) * (x2 - x1) != (y2 - y1) * (x1 - x0)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 744. Find Smallest Letter Greater Than Target
+     * You are given an array of characters letters that is sorted in
+     * non-decreasing order, and a character target. There are at least two
+     * different characters in letters.
+     * Return the smallest character in letters that is lexicographically greater
+     * than target. If such a character does not exist, return the first character
+     * in letters.
+     *
+     * Example 1:
+     * Input: letters = ["c","f","j"], target = "a"
+     * Output: "c"
+     *
+     * Example 2:
+     * Input: letters = ["c","f","j"], target = "c"
+     * Output: "f"
+     *
+     * Example 3:
+     * Input: letters = ["x","x","y", "y"], target = "z"
+     * Output: "x"
+     */
+    static char nextGreatestLetter(vector<char>& letters, char target) {
+        int left = 0, right = letters.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (letters[mid] <= target) left = mid + 1;
+            else right = mid - 1;
+        }
+        return letters[left % letters.size()];
+    }
+
+    /**
+     * 1150. Check If a Number Is Majority Element in a Sorted Array
+     * Given an integer array nums sorted in non-decreasing order, and an integer
+     * target, return true if target is a majority element, or false otherwise.
+     * A majority element in an array nums is an element that appears more than
+     * nums.length / 2 times in the array.
+     *
+     * Example 1:
+     * Input: nums = [2,4,5,5,5,5,5,6,6], target = 5
+     * Output: true
+     *
+     * Example 2:
+     * Input: nums = [10,100,101,101], target = 101
+     * Output: false
+     */
+    static bool isMajorityElement(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) left = mid + 1;
+            else right = mid - 1;
+        }
+        if (left >= nums.size() || nums[left] != target) return false;
+        return left + nums.size() / 2 < nums.size() && nums[left + nums.size() / 2] == target;
+    }
+
+    /**
+     * 14. Longest Common Prefix
+     * Write a function to find the longest common prefix string amongst an array
+     * of strings. If there is no common prefix, return an empty string "".
+     *
+     * Example 1:
+     * Input: ["flower","flow","flight"]
+     * Output: "fl"
+     *
+     * Example 2:
+     * Input: ["dog","racecar","car"]
+     * Output: ""
+     */
+    static string longestCommonPrefix(vector<string>& strs) {
+        if (strs.size() == 0) return "";
+        string res = strs[0];
+        for (int i = 1; i < strs.size(); i++) {
+            int j = 0;
+            for (; j < res.size() && j < strs[i].size(); j++) {
+                if (res[j] != strs[i][j]) break;
+            }
+            res = res.substr(0, j);
+        }
+        return res;
+    }
+
+    /**
+     * 25. Reverse Nodes in k-Group
+     * Given the head of a linked list, reverse the nodes of the list k at a
+     * time, and return the modified list.
+     * k is a positive integer and is less than or equal to the length of the
+     * linked list. If the number of nodes is not a multiple of k then left-out
+     * nodes, in the end, should remain as it is.
+     * You may not alter the values in the list's nodes, only nodes themselves
+     * may be changed.
+     *
+     * Example 1:
+     * Input: head = [1,2,3,4,5], k = 2
+     * Output: [2,1,4,3,5]
+     *
+     * Example 2:
+     * Input: head = [1,2,3,4,5], k = 3
+     * Output: [3,2,1,4,5]
+     */
+    static ListNode* reverseKGroup(ListNode* head, int k) {
+        auto* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* pre = dummy;
+        while (head) {
+            ListNode* tail = pre;
+            for (int i = 0; i < k; i++) {
+                tail = tail->next;
+                if (!tail) return dummy->next;
+            }
+            ListNode* nex = tail->next;
+            pair<ListNode*, ListNode*> res = _rev(head, tail);
+            head = res.first;
+            tail = res.second;
+            pre->next = head;
+            tail->next = nex;
+            pre = tail;
+            head = tail->next;
+        }
+        return dummy->next;
+    }
+    /**
+     * helper function for reverseKGroup
+     */
+    static pair<ListNode*, ListNode*> _rev(ListNode* head, ListNode* tail) {
+        ListNode* pre = tail->next;
+        ListNode* p = head;
+        while (pre != tail) {
+            ListNode* nex = p->next;
+            p->next = pre;
+            pre = p;
+            p = nex;
+        }
+        return {tail, head};
+    }
+
 
 
 

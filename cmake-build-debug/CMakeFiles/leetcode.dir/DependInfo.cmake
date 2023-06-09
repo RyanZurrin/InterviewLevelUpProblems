@@ -8,10 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "D:/src/CLionProjects/InterviewLevelUpProblems/leet.c" "CMakeFiles/leetcode.dir/leet.c.obj" "gcc" "CMakeFiles/leetcode.dir/leet.c.obj.d"
-  "D:/src/CLionProjects/InterviewLevelUpProblems/isPrime.cpp" "CMakeFiles/leetcode.dir/isPrime.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/isPrime.cpp.obj.d"
-  "D:/src/CLionProjects/InterviewLevelUpProblems/leetCode.cpp" "CMakeFiles/leetcode.dir/leetCode.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/leetCode.cpp.obj.d"
-  "D:/src/CLionProjects/InterviewLevelUpProblems/main.cpp" "CMakeFiles/leetcode.dir/main.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/main.cpp.obj.d"
+  "D:/src/InterviewLevelUpProblems/leet.c" "CMakeFiles/leetcode.dir/leet.c.obj" "gcc" "CMakeFiles/leetcode.dir/leet.c.obj.d"
+  "D:/src/InterviewLevelUpProblems/isPrime.cpp" "CMakeFiles/leetcode.dir/isPrime.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/isPrime.cpp.obj.d"
+  "D:/src/InterviewLevelUpProblems/leetCode.cpp" "CMakeFiles/leetcode.dir/leetCode.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/leetCode.cpp.obj.d"
+  "D:/src/InterviewLevelUpProblems/main.cpp" "CMakeFiles/leetcode.dir/main.cpp.obj" "gcc" "CMakeFiles/leetcode.dir/main.cpp.obj.d"
   )
 
 # Targets to which this target links.
