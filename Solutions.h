@@ -4002,6 +4002,305 @@ public:
         return {tail, head};
     }
 
+    /**
+     * 1751. Maximum Number of Events That Can Be Attended II
+     * You are given an array of events where events[i] =
+     * [startDay_i, endDay_i, value_i]. The ith event starts at startDay_i and
+     * ends at endDay_i, and if you attend this event, you will receive a
+     * value of value_i. You are also given an integer k which represents the
+     * maximum number of events you can attend.
+     *
+     * You can only attend one event at a time. If you choose to attend an
+     * event, you must attend the entire event. Note that the end day is
+     * inclusive: that is, you cannot attend two events where one of them
+     * starts and the other ends on the same day.
+     *
+     * Return the maximum sum of values that you can receive by attending events.
+     *
+     * Example 1:
+     * Input: events = [[1,2,4],[3,4,3],[2,3,1]], k = 2
+     * Output: 7
+     * Explanation: Choose the green events, 0 and 1 (0-indexed) for a total
+     * value of 4 + 3 = 7.
+     *
+     * Example 2:
+     * Input: events = [[1,2,4],[3,4,3],[2,3,10]], k = 2
+     * Output: 10
+     * Explanation: Choose event 2 for a total value of 10.
+     *
+     * Example 3:
+     * Input: events = [[1,1,1],[2,2,2],[3,3,3],[4,4,4]], k = 3
+     * Output: 9
+     * Explanation: Although the events do not overlap, you can only attend 3
+     * events. Pick the highest valued three.
+     *
+     * Constraints:
+     * 1 <= k <= events.length
+     * 1 <= k * events.length <= 10^6
+     * 1 <= startDay_i <= endDay_i <= 10^9
+     * 1 <= value_i <= 10^6
+     *
+     * @param events 2D array of events
+     * @param k maximum number of events you can attend
+     *
+     * @return maximum sum of values that you can receive by attending events
+     */
+    static int maxValue(vector<vector<int>>& events, int k) {
+        sort(events.begin(), events.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[1] < b[1];
+        });
+        int n = events.size();
+        vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
+        for (int i = 1; i <= n; i++) {
+            int l = 0, r = i - 1;
+            while (l < r) {
+                int mid = l + (r - l) / 2;
+                if (events[mid][1] < events[i - 1][0]) l = mid + 1;
+                else r = mid;
+            }
+            for (int j = 1; j <= k; j++) {
+                dp[i][j] = max(dp[i - 1][j], dp[l][j - 1] + events[i - 1][2]);
+            }
+        }
+    return dp[n][k];
+    }
+
+    /**
+     * 735. Asteroid Collision
+     * We are given an array asteroids of integers representing asteroids in a
+     * row.
+     * For each asteroid, the absolute value represents its size, and the sign
+     * represents its direction (positive meaning right, negative meaning left).
+     * Each asteroid moves at the same speed.
+     * Find out the state of the asteroids after all collisions. If two
+     * asteroids
+     * meet, the smaller one will explode. If both are the same size, both will
+     * explode. Two asteroids moving in the same direction will never meet.
+     *
+     * Example 1:
+     * Input: asteroids = [5,10,-5]
+     * Output: [5,10]
+     * Explanation: The 10 and -5 collide resulting in 10.  The 5 and 10 never
+     *
+     * Example 2:
+     * Input: asteroids = [8,-8]
+     * Output: []
+     * Explanation: The 8 and -8 collide exploding each other.
+     *
+     * Example 3:
+     * Input: asteroids = [10,2,-5]
+     * Output: [10]
+     * Explanation: The 2 and -5 collide resulting in -5. The 10 and -5 collide
+     *
+     * Constraints:
+     * 2 <= asteroids.length <= 10^4
+     * -1000 <= asteroids[i] <= 1000
+     * asteroids[i] != 0
+     *
+     * @param asteroids the asteroids
+     * @return the state of the asteroids after all collisions
+     */
+    static vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> res;
+        for (int i = 0; i < asteroids.size(); i++) {
+            if (asteroids[i] > 0) res.push_back(asteroids[i]);
+            else {
+                while (!res.empty() && res.back() > 0 && res.back() < -asteroids[i]) {
+                    res.pop_back();
+                }
+                if (res.empty() || res.back() < 0) res.push_back(asteroids[i]);
+                else if (res.back() == -asteroids[i]) res.pop_back();
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 46. Permutations
+     * Given an array nums of distinct integers, return all the possible
+     * permutations. You can return the answer in any order.
+     *
+     * Example 1:
+     * Input: nums = [1,2,3]
+     * Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+     *
+     * Example 2:
+     * Input: nums = [0,1]
+     * Output: [[0,1],[1,0]]
+     *
+     * Example 3:
+     * Input: nums = [1]
+     * Output: [[1]]
+     *
+     * Constraints:
+     * 1 <= nums.length <= 6
+     * -10 <= nums[i] <= 10
+     * All the integers of nums are unique.
+     *
+     * @param nums the array of distinct integers
+     * @return all the possible permutations
+     */
+    static vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> cur;
+        vector<bool> visited(nums.size(), false);
+        _permute(nums, res, cur, visited);
+        return res;
+    }
+    static void _permute(vector<int>& nums, vector<vector<int>>& res,
+                            vector<int>& cur, vector<bool>& visited) {
+        if (cur.size() == nums.size()) {
+            res.push_back(cur);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                cur.push_back(nums[i]);
+                _permute(nums, res, cur, visited);
+                cur.pop_back();
+                visited[i] = false;
+            }
+        }
+    }
+
+    /**
+     * 1870. Minimum Speed to Arrive on Time
+     * Yor are given a floating-point number 'hour', representing the amount of
+     * time you have to reach the office. To commute to the office, you must
+     * take 'n' trains in sequential order. You are also given an integer array
+     * 'dist' of length 'n', where dist[i] describes the distance (in kilometers)
+     * of the ith train ride.
+     * Each train can only depart at an integer hour, so you may need to wait in
+     * between each train ride.
+     * For example, if the 1st train ride takes 1.5 hours, you must wait for an
+     * additional 0.5 hours before you can depart on the 2nd train ride at the
+     * 2 hour mark.
+     *
+     * Return the minimum positive integer speed (in kilometers per hour) that
+     * all the trains must travel at for you to reach the office on time, or -1
+     * if it is impossible to be on time.
+     * Tests are generated such that the answer will not exceed 10^7 and hour
+     * will have at most two digits after the decimal point.
+     *
+     * Example 1:
+     * Input: dist = [1,3,2], hour = 6
+     * Output: 1
+     * Explanation: At speed 1:
+     * - The first train ride takes 1/1 = 1 hour.
+     * - Since we are already at an integer hour, we depart immediately at the
+     * 1 hour mark. The second train takes 3/1 = 3 hours.
+     * - Since we are already at an integer hour, we depart immediately at the
+     * 4 hour mark. The third train takes 2/1 = 2 hours.
+     * - You will arrive at exactly the 6 hour mark.
+     *
+     * Example 2:
+     * Input: dist = [1,3,2], hour = 2.7
+     * Output: 3
+     * Explanation: At speed 3:
+     * - The first train ride takes 1/3 = 0.33333 hours.
+     * - Since we are not at an integer hour, we wait until the 1 hour mark to
+     * depart. The second train ride takes 3/3 = 1 hour.
+     * - Since we are already at an integer hour, we depart immediately at the
+     * 2 hour mark. The third train takes 2/3 = 0.66667 hours.
+     * - You will arrive at the 2.66667 hour mark.
+     *
+     * Example 3:
+     * Input: dist = [1,3,2], hour = 1.9
+     * Output: -1
+     * Explanation: It is impossible because the earliest the third train can
+     * depart is at the 2 hour mark.
+     *
+     * Constraints:
+     * n == dist.length
+     * 1 <= n <= 10^5
+     * 1 <= dist[i] <= 10^5
+     * 1 <= hour <= 10^9
+     *
+     * @param dist the distance of each train ride
+     * @param hour the amount of time you have to reach the office
+     * @return the minimum positive integer speed that all the trains must travel
+     */
+    static int minSpeedOnTime(vector<int>& dist, double hour) {
+        int n = dist.size();
+        if (hour <= n - 1) return -1;
+        int left = 1, right = 1e7;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            double time = 0;
+            for (int i = 0; i < n - 1; i++) {
+                time += ceil((double)dist[i] / mid);
+            }
+            time += (double)dist[n - 1] / mid;
+            if (time <= hour) right = mid - 1;
+            else left = mid + 1;
+        }
+        return left;
+    }
+
+    /**
+     * 439. Ternary Expression Parser
+     * Given a string expression representing arbitrarily nested ternary
+     * expressions, evaluate the expression, and return the result of it.
+     *
+     * You can always assume that the given expression is valid and only
+     * contains digits, '?', ':', 'T', and 'F' where 'T' is true and 'F' is
+     * false. All the numbers in the expression are one-digit numbers  (i.e.,
+     * in the range [0, 9]).
+     *
+     * The conditional expressions group right-to-left (as usual in most
+     * languages), and the result of the expression will always evaluate to
+     * either a digit, 'T' or 'F'.
+     *
+     * Example 1:
+     * Input: expression = "T?2:3"
+     * Output: "2"
+     * Explanation: If true, then result is 2; otherwise result is 3.
+     *
+     * Example 2:
+     * Input: expression = "F?1:T?4:5"
+     * Output: "4"
+     * Explanation: The conditional expressions group right-to-left. Using
+     * parenthesis, it is read/evaluated as:
+     * "(F ? 1 : (T ? 4 : 5))" --> "(F ? 1 : 4)" --> "4"
+     * or "(F ? 1 : (T ? 4 : 5))" --> "(T ? 4 : 5)" --> "4"
+     *
+     * Example 3:
+     * Input: expression = "T?T?F:5:3"
+     * Output: "F"
+     * Explanation: The conditional expressions group right-to-left. Using
+     * parenthesis, it is read/evaluated as:
+     * "(T ? (T ? F : 5) : 3)" --> "(T ? F : 3)" --> "F"
+     * or "(T ? (T ? F : 5) : 3)" --> "(T ? F : 5)" --> "F"
+     *
+     * Constraints:
+     * 5 <= expression.length <= 10^4
+     * expression consists of digits, 'T', 'F', '?', and ':'.
+     * It is guaranteed that expression is a valid ternary expression and that
+     * each number is a one-digit number.
+     *
+     * @param expression the expression
+     * @return the result of the expression
+     */
+    static string parseTernary(string expression) {
+        stack<char> stk;
+        for (int i = expression.size() - 1; i >= 0; i--) {
+            if (!stk.empty() && stk.top() == '?') {
+                stk.pop();
+                char first = stk.top();
+                stk.pop();
+                stk.pop();
+                char second = stk.top();
+                stk.pop();
+                if (expression[i] == 'T') stk.push(first);
+                else stk.push(second);
+            } else stk.push(expression[i]);
+        }
+        return string(1, stk.top());
+    }
+
+
+
 
 
 
